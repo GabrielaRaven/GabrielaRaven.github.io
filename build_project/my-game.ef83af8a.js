@@ -59891,13 +59891,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-},{"./engine/engine":"../libs/pixi-ecs/engine/engine.ts","./engine/component":"../libs/pixi-ecs/engine/component.ts","./engine/constants":"../libs/pixi-ecs/engine/constants.ts","./utils/flags":"../libs/pixi-ecs/utils/flags.ts","./engine/game-object-proxy":"../libs/pixi-ecs/engine/game-object-proxy.ts","./engine/message":"../libs/pixi-ecs/engine/message.ts","./engine/game-object":"../libs/pixi-ecs/engine/game-object.ts","./engine/game-objects/bitmap-text":"../libs/pixi-ecs/engine/game-objects/bitmap-text.ts","./engine/game-objects/container":"../libs/pixi-ecs/engine/game-objects/container.ts","./engine/game-objects/graphics":"../libs/pixi-ecs/engine/game-objects/graphics.ts","./engine/game-objects/mesh":"../libs/pixi-ecs/engine/game-objects/mesh.ts","./engine/game-objects/nine-slice-plane":"../libs/pixi-ecs/engine/game-objects/nine-slice-plane.ts","./engine/game-objects/particle-container":"../libs/pixi-ecs/engine/game-objects/particle-container.ts","./engine/game-objects/sprite":"../libs/pixi-ecs/engine/game-objects/sprite.ts","./engine/game-objects/text":"../libs/pixi-ecs/engine/game-objects/text.ts","./engine/game-objects/tiling-sprite":"../libs/pixi-ecs/engine/game-objects/tiling-sprite.ts","./engine/builder":"../libs/pixi-ecs/engine/builder.ts","./engine/scene":"../libs/pixi-ecs/engine/scene.ts","./components/chain-component":"../libs/pixi-ecs/components/chain-component.ts","./components/debug-component":"../libs/pixi-ecs/components/debug-component.ts","./components/func-component":"../libs/pixi-ecs/components/func-component.ts","./components/key-input-component":"../libs/pixi-ecs/components/key-input-component.ts","./components/virtual-gamepad-component":"../libs/pixi-ecs/components/virtual-gamepad-component.ts","./components/pointer-input-component":"../libs/pixi-ecs/components/pointer-input-component.ts","./utils/vector":"../libs/pixi-ecs/utils/vector.ts","./utils/query-condition":"../libs/pixi-ecs/utils/query-condition.ts"}],"../src/my-game.ts":[function(require,module,exports) {
+},{"./engine/engine":"../libs/pixi-ecs/engine/engine.ts","./engine/component":"../libs/pixi-ecs/engine/component.ts","./engine/constants":"../libs/pixi-ecs/engine/constants.ts","./utils/flags":"../libs/pixi-ecs/utils/flags.ts","./engine/game-object-proxy":"../libs/pixi-ecs/engine/game-object-proxy.ts","./engine/message":"../libs/pixi-ecs/engine/message.ts","./engine/game-object":"../libs/pixi-ecs/engine/game-object.ts","./engine/game-objects/bitmap-text":"../libs/pixi-ecs/engine/game-objects/bitmap-text.ts","./engine/game-objects/container":"../libs/pixi-ecs/engine/game-objects/container.ts","./engine/game-objects/graphics":"../libs/pixi-ecs/engine/game-objects/graphics.ts","./engine/game-objects/mesh":"../libs/pixi-ecs/engine/game-objects/mesh.ts","./engine/game-objects/nine-slice-plane":"../libs/pixi-ecs/engine/game-objects/nine-slice-plane.ts","./engine/game-objects/particle-container":"../libs/pixi-ecs/engine/game-objects/particle-container.ts","./engine/game-objects/sprite":"../libs/pixi-ecs/engine/game-objects/sprite.ts","./engine/game-objects/text":"../libs/pixi-ecs/engine/game-objects/text.ts","./engine/game-objects/tiling-sprite":"../libs/pixi-ecs/engine/game-objects/tiling-sprite.ts","./engine/builder":"../libs/pixi-ecs/engine/builder.ts","./engine/scene":"../libs/pixi-ecs/engine/scene.ts","./components/chain-component":"../libs/pixi-ecs/components/chain-component.ts","./components/debug-component":"../libs/pixi-ecs/components/debug-component.ts","./components/func-component":"../libs/pixi-ecs/components/func-component.ts","./components/key-input-component":"../libs/pixi-ecs/components/key-input-component.ts","./components/virtual-gamepad-component":"../libs/pixi-ecs/components/virtual-gamepad-component.ts","./components/pointer-input-component":"../libs/pixi-ecs/components/pointer-input-component.ts","./utils/vector":"../libs/pixi-ecs/utils/vector.ts","./utils/query-condition":"../libs/pixi-ecs/utils/query-condition.ts"}],"../src/Common.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports.getSpriteAtPos = getSpriteAtPos;
+exports.createTexture = createTexture;
+exports.p_contr = exports.PlayerFlags = exports.Tags = exports.SECOND_PLAYER_CONTROLS = exports.FIRST_PLAYER_CONTROLS = exports.GameState = exports._Y = exports._X = exports.MOVE_CONST = exports.TEXTURE_SCALE = exports.SCENE_HEIGHT = exports.SCENE_WIDTH = void 0;
 
 var ECS = _interopRequireWildcard(require("../libs/pixi-ecs"));
 
@@ -59905,15 +59907,351 @@ function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return 
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+var SCENE_WIDTH = 20;
+exports.SCENE_WIDTH = SCENE_WIDTH;
+var SCENE_HEIGHT = 16;
+exports.SCENE_HEIGHT = SCENE_HEIGHT;
+var TEXTURE_SCALE = SCENE_WIDTH / (20 * 24);
+exports.TEXTURE_SCALE = TEXTURE_SCALE;
+var MOVE_CONST = 0.005;
+exports.MOVE_CONST = MOVE_CONST;
+var _X = 0;
+exports._X = _X;
+var _Y = 1;
+exports._Y = _Y;
+var GameState;
+exports.GameState = GameState;
+
+(function (GameState) {
+  GameState[GameState["START"] = 0] = "START";
+  GameState[GameState["RUNNING"] = 1] = "RUNNING";
+  GameState[GameState["GAME_OVER"] = 2] = "GAME_OVER";
+})(GameState || (exports.GameState = GameState = {})); //export let gs: GameState;
+
+
+var FIRST_PLAYER_CONTROLS = [ECS.Keys.KEY_LEFT, ECS.Keys.KEY_RIGHT, ECS.Keys.KEY_UP, ECS.Keys.KEY_DOWN, ECS.Keys.KEY_SPACE];
+exports.FIRST_PLAYER_CONTROLS = FIRST_PLAYER_CONTROLS;
+var SECOND_PLAYER_CONTROLS = [ECS.Keys.KEY_A, ECS.Keys.KEY_D, ECS.Keys.KEY_W, ECS.Keys.KEY_S, ECS.Keys.KEY_SHIFT];
+exports.SECOND_PLAYER_CONTROLS = SECOND_PLAYER_CONTROLS;
+var Tags;
+exports.Tags = Tags;
+
+(function (Tags) {
+  Tags["BOUNDARY"] = "boundary";
+  Tags["PATH"] = "path";
+  Tags["DANGER"] = "danger";
+  Tags["FLOWER"] = "flower";
+  Tags["PLAYER"] = "player";
+  Tags["AI"] = "ai";
+  Tags["PLAYER1"] = "player1";
+  Tags["PLAYER2"] = "player2";
+  Tags["PLAYER3"] = "player3";
+  Tags["PLAYER4"] = "player4";
+  Tags["FLAME"] = "flame";
+  Tags["BOMB"] = "bomb";
+})(Tags || (exports.Tags = Tags = {}));
+
+var PlayerFlags;
+exports.PlayerFlags = PlayerFlags;
+
+(function (PlayerFlags) {
+  PlayerFlags[PlayerFlags["LEFT_COLLISION"] = 1] = "LEFT_COLLISION";
+  PlayerFlags[PlayerFlags["RIGHT_COLLISION"] = 2] = "RIGHT_COLLISION";
+  PlayerFlags[PlayerFlags["UPPER_COLLISION"] = 3] = "UPPER_COLLISION";
+  PlayerFlags[PlayerFlags["BOTTOM_COLLISION"] = 4] = "BOTTOM_COLLISION";
+  PlayerFlags[PlayerFlags["BOMB_TO_PLANT"] = 5] = "BOMB_TO_PLANT";
+  PlayerFlags[PlayerFlags["KILLED"] = 6] = "KILLED";
+  PlayerFlags[PlayerFlags["IN_DANGER"] = 7] = "IN_DANGER";
+})(PlayerFlags || (exports.PlayerFlags = PlayerFlags = {}));
+
+var p_contr;
+exports.p_contr = p_contr;
+
+(function (p_contr) {
+  p_contr[p_contr["_LEFT"] = 0] = "_LEFT";
+  p_contr[p_contr["_RIGHT"] = 1] = "_RIGHT";
+  p_contr[p_contr["_UP"] = 2] = "_UP";
+  p_contr[p_contr["_DOWN"] = 3] = "_DOWN";
+  p_contr[p_contr["_BOMB"] = 4] = "_BOMB";
+})(p_contr || (exports.p_contr = p_contr = {}));
+
+function getSpriteAtPos(x_pos, y_pos, tag, scene) {
+  var sprites = scene.findObjectsByTag(tag);
+
+  var _iterator = _createForOfIteratorHelper(sprites),
+      _step;
+
+  try {
+    for (_iterator.s(); !(_step = _iterator.n()).done;) {
+      var sprite = _step.value;
+      if (sprite.x == x_pos && sprite.y == y_pos) return sprite;
+    }
+  } catch (err) {
+    _iterator.e(err);
+  } finally {
+    _iterator.f();
+  }
+}
+
+function createTexture(offsetX, offsetY, width, height) {
+  var name = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 'spritesheet';
+  var texture = PIXI.Texture.from(name);
+  texture = texture.clone();
+  texture.frame = new PIXI.Rectangle(offsetX, offsetY, width, height);
+  return texture;
+}
+},{"../libs/pixi-ecs":"../libs/pixi-ecs/index.ts"}],"../src/Bomb.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Bomb = void 0;
+
+var ECS = _interopRequireWildcard(require("../libs/pixi-ecs"));
+
+var _Common = require("./Common");
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
 function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Bomb = /*#__PURE__*/function () {
+  function Bomb(scene, origin, size, explosion_time) {
+    _classCallCheck(this, Bomb);
+
+    this.exploded = false;
+    this.explosion_sprites = new Array();
+    this.danger_sprites = new Array();
+    this.to_destroy = new Array();
+    this.to_destroy2 = new Array();
+    this.origin = origin;
+    this.explosion_size = size;
+    this.explosion_time = explosion_time;
+    this.removal_time = explosion_time + 900;
+    this.scene = scene;
+    this.bomb_layer = scene.getChildByName('bombLayer');
+    this.path_layer = scene.getChildByName('pathLayer');
+    this.plant();
+  }
+
+  _createClass(Bomb, [{
+    key: "plant",
+    value: function plant() {
+      var sprite = new ECS.Sprite('', (0, _Common.createTexture)(0, 24, 24, 24));
+      sprite.addTag(_Common.Tags.BOMB);
+      sprite.scale.set(_Common.TEXTURE_SCALE);
+      sprite.position.x = this.origin[_Common._X];
+      sprite.position.y = this.origin[_Common._Y];
+      this.bomb_layer.addChild(sprite);
+      this.bomb_sprite = sprite;
+      this.prepareForExplosion(-1, _Common._X);
+      this.prepareForExplosion(1, _Common._X);
+      this.prepareForExplosion(-1, _Common._Y);
+      this.prepareForExplosion(1, _Common._Y);
+      console.log("bomb planted!");
+    }
+  }, {
+    key: "prepareForExplosion",
+    value: function prepareForExplosion(direction, coordinate) {
+      var flowers = this.scene.scene.findObjectsByTag(_Common.Tags.FLOWER);
+      var boundaries = this.scene.scene.findObjectsByTag(_Common.Tags.BOUNDARY);
+      var bombs = this.scene.scene.findObjectsByTag(_Common.Tags.BOMB);
+      var ai_players = this.scene.scene.findObjectsByTag(_Common.Tags.AI); //for (let player of ai_players) player.resetFlag(PlayerFlags.IN_DANGER);
+
+      var colliders = [].concat(_toConsumableArray(boundaries), _toConsumableArray(bombs), _toConsumableArray(flowers), _toConsumableArray(ai_players));
+
+      for (var i = this.origin[coordinate] + direction; i != this.origin[coordinate] + this.explosion_size * direction; i += direction) {
+        var currX = coordinate == _Common._X ? i : this.origin[_Common._X];
+        var currY = coordinate == _Common._Y ? i : this.origin[_Common._Y];
+        var currentBox = new PIXI.Rectangle(currX, currY, 1, 1);
+
+        var _iterator = _createForOfIteratorHelper(colliders),
+            _step;
+
+        try {
+          for (_iterator.s(); !(_step = _iterator.n()).done;) {
+            var c = _step.value;
+            var bbox = c.getBounds();
+
+            if (bbox.x == currentBox.x && bbox.y == currentBox.y) {
+              if (c.hasTag(_Common.Tags.FLOWER)) {
+                this.to_destroy2.push(c);
+
+                if (this.to_destroy2.length == 4) {
+                  return;
+                }
+              }
+
+              return;
+            }
+          }
+        } catch (err) {
+          _iterator.e(err);
+        } finally {
+          _iterator.f();
+        }
+
+        var sprite = (0, _Common.getSpriteAtPos)(currX, currY, _Common.Tags.PATH, this.scene.scene);
+        sprite.addTag(_Common.Tags.DANGER);
+        sprite.removeTag(_Common.Tags.PATH);
+        this.danger_sprites.push(sprite);
+      }
+    }
+  }, {
+    key: "renderExplosion",
+    value: function renderExplosion() {
+      var _iterator2 = _createForOfIteratorHelper(this.danger_sprites),
+          _step2;
+
+      try {
+        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+          var x = _step2.value;
+          var sprite = new ECS.Sprite('', (0, _Common.createTexture)(96, 0, 24, 24));
+          sprite.addTag(_Common.Tags.FLAME);
+          sprite.scale.set(_Common.TEXTURE_SCALE);
+          sprite.position.x = x.x;
+          sprite.position.y = x.y;
+          this.bomb_layer.addChild(sprite);
+          this.explosion_sprites.push(sprite);
+        }
+      } catch (err) {
+        _iterator2.e(err);
+      } finally {
+        _iterator2.f();
+      }
+    }
+  }, {
+    key: "destroyHitSprites",
+    value: function destroyHitSprites() {
+      var path_layer = this.scene.getChildByName('pathLayer');
+      var flower_layer = this.scene.getChildByName('flowersLayer');
+
+      var _iterator3 = _createForOfIteratorHelper(this.to_destroy2),
+          _step3;
+
+      try {
+        for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+          var destroyed = _step3.value;
+          var sprite = new ECS.Sprite('', (0, _Common.createTexture)(0, 0, 24, 24));
+          sprite.addTag(_Common.Tags.PATH);
+          sprite.scale.set(_Common.TEXTURE_SCALE);
+          sprite.position.x = destroyed.x;
+          sprite.position.y = destroyed.y;
+          path_layer.addChild(sprite);
+          flower_layer.removeChild(destroyed);
+        }
+      } catch (err) {
+        _iterator3.e(err);
+      } finally {
+        _iterator3.f();
+      }
+
+      this.to_destroy2 = [];
+    }
+  }, {
+    key: "explode",
+    value: function explode() {
+      this.bomb_layer.removeChild(this.bomb_sprite);
+      var sprite = new ECS.Sprite('', (0, _Common.createTexture)(96, 0, 24, 24));
+      sprite.addTag(_Common.Tags.FLAME);
+      sprite.scale.set(_Common.TEXTURE_SCALE);
+      sprite.position.x = this.origin[_Common._X];
+      sprite.position.y = this.origin[_Common._Y];
+      this.bomb_layer.addChild(sprite);
+      this.explosion_sprites.push(sprite);
+      this.renderExplosion();
+      console.log("bomb exploded!");
+      this.exploded = true;
+    }
+  }, {
+    key: "cleanExplosion",
+    value: function cleanExplosion() {
+      var _iterator4 = _createForOfIteratorHelper(this.explosion_sprites),
+          _step4;
+
+      try {
+        for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+          var expl = _step4.value;
+          this.bomb_layer.removeChild(expl);
+        }
+      } catch (err) {
+        _iterator4.e(err);
+      } finally {
+        _iterator4.f();
+      }
+
+      var _iterator5 = _createForOfIteratorHelper(this.danger_sprites),
+          _step5;
+
+      try {
+        for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
+          var d = _step5.value;
+          d.addTag(_Common.Tags.PATH);
+          d.removeTag(_Common.Tags.DANGER);
+        }
+      } catch (err) {
+        _iterator5.e(err);
+      } finally {
+        _iterator5.f();
+      }
+
+      this.destroyHitSprites();
+      this.explosion_sprites = [];
+      this.danger_sprites = [];
+      console.log("explosion cleaned!");
+    }
+  }]);
+
+  return Bomb;
+}();
+
+exports.Bomb = Bomb;
+},{"../libs/pixi-ecs":"../libs/pixi-ecs/index.ts","./Common":"../src/Common.ts"}],"../src/PlayerController.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.PlayerController = void 0;
+
+var ECS = _interopRequireWildcard(require("../libs/pixi-ecs"));
+
+var _Bomb = require("./Bomb");
+
+var _Common = require("./Common");
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -59935,72 +60273,322 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
+var PlayerController = /*#__PURE__*/function (_ECS$Component) {
+  _inherits(PlayerController, _ECS$Component);
+
+  var _super = _createSuper(PlayerController);
+
+  function PlayerController() {
+    _classCallCheck(this, PlayerController);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(PlayerController, [{
+    key: "moveLeft",
+    value: function moveLeft(units) {
+      var bbox = this.owner.getBounds();
+
+      if (bbox.left > 0) {
+        this.owner.position.x -= Math.min(units, bbox.left);
+      }
+    }
+  }, {
+    key: "moveRight",
+    value: function moveRight(units) {
+      var bbox = this.owner.getBounds();
+
+      if (bbox.right <= _Common.SCENE_WIDTH) {
+        this.owner.position.x += Math.min(units, _Common.SCENE_WIDTH - bbox.right);
+      }
+    }
+  }, {
+    key: "moveUp",
+    value: function moveUp(units) {
+      var bbox = this.owner.getBounds();
+
+      if (bbox.top > 0) {
+        this.owner.position.y -= Math.min(units, bbox.top);
+      }
+    }
+  }, {
+    key: "moveDown",
+    value: function moveDown(units) {
+      var bbox = this.owner.getBounds();
+
+      if (bbox.bottom <= _Common.SCENE_HEIGHT) {
+        this.owner.position.y += Math.min(units, _Common.SCENE_HEIGHT - bbox.bottom - 1);
+      }
+    }
+  }, {
+    key: "clipMyPosition",
+    value: function clipMyPosition() {
+      var bbox = this.owner.getBounds();
+      var x_dif = bbox.x - Math.trunc(bbox.x);
+      var y_dif = bbox.y - Math.trunc(bbox.y);
+      if (x_dif > 0.95) this.owner.position.x = Math.ceil(this.owner.position.x);else if (x_dif < 0.05) this.owner.position.x = Math.floor(this.owner.position.x);
+      if (y_dif > 0.95) this.owner.position.y = Math.ceil(this.owner.position.y);else if (y_dif < 0.05) this.owner.position.y = Math.floor(this.owner.position.y);
+    }
+  }, {
+    key: "move",
+    value: function move(delta, absolute, controls) {
+      var keyInputCmp = this.scene.findGlobalComponentByName(ECS.KeyInputComponent.name);
+
+      if (keyInputCmp.isKeyPressed(controls[_Common.p_contr._LEFT])) {
+        if (this.owner.hasFlag(_Common.PlayerFlags.LEFT_COLLISION)) keyInputCmp.handleKey(controls[_Common.p_contr._LEFT]);else this.moveLeft(delta * 0.01);
+      }
+
+      if (keyInputCmp.isKeyPressed(controls[_Common.p_contr._RIGHT])) {
+        if (this.owner.hasFlag(_Common.PlayerFlags.RIGHT_COLLISION)) keyInputCmp.handleKey(controls[_Common.p_contr._RIGHT]);else this.moveRight(delta * 0.01);
+      }
+
+      if (keyInputCmp.isKeyPressed(controls[_Common.p_contr._DOWN])) {
+        if (this.owner.hasFlag(_Common.PlayerFlags.BOTTOM_COLLISION)) keyInputCmp.handleKey(controls[_Common.p_contr._DOWN]);else this.moveDown(delta * 0.01);
+      }
+
+      if (keyInputCmp.isKeyPressed(controls[_Common.p_contr._UP])) {
+        if (this.owner.hasFlag(_Common.PlayerFlags.UPPER_COLLISION)) keyInputCmp.handleKey(controls[_Common.p_contr._UP]);else this.moveUp(delta * 0.01);
+      }
+
+      if (keyInputCmp.isKeyPressed(controls[_Common.p_contr._BOMB])) {
+        this.owner.setFlag(_Common.PlayerFlags.BOMB_TO_PLANT);
+        keyInputCmp.handleKey(controls[_Common.p_contr._BOMB]);
+      }
+
+      for (var i = 1; i <= 4; i++) {
+        this.owner.resetFlag(i);
+      }
+
+      this.clipMyPosition();
+    }
+  }, {
+    key: "plantBomb",
+    value: function plantBomb() {
+      if (this.player.bombs_planted < this.player.max_bombs_capacity) {
+        var now = Date.now();
+        this.player.bombs_planted++;
+        var b = new _Bomb.Bomb(this.scene.stage, [Math.round(this.owner.position.x), Math.round(this.owner.position.y)], this.player.explosion_size, now + 1500);
+        this.player.bombs_queue.push(b);
+      }
+    }
+  }, {
+    key: "updateGameState",
+    value: function updateGameState() {
+      if (window.gs != _Common.GameState.START) return;
+      var keyInputCmp = this.scene.findGlobalComponentByName(ECS.KeyInputComponent.name);
+
+      if (keyInputCmp.isKeyPressed(ECS.Keys.KEY_S)) {
+        keyInputCmp.handleKey(ECS.Keys.KEY_S);
+        var a = this.scene.stage.getChildByName('xxx');
+        this.scene.stage.removeChild(a);
+        a.destroy();
+        window.gs = _Common.GameState.RUNNING;
+        console.log("GAME IS RUNNING!!!");
+      }
+    }
+  }, {
+    key: "updateBombs",
+    value: function updateBombs() {
+      if (this.player.bombs_queue.length > 0) {
+        var bomb = this.player.bombs_queue[0];
+
+        if (bomb.explosion_time < Date.now() && !bomb.exploded) {
+          bomb.explode();
+        } else if (bomb.exploded && bomb.removal_time < Date.now()) {
+          bomb.cleanExplosion();
+          this.player.bombs_queue.shift();
+          this.player.bombs_planted--;
+        }
+      }
+    }
+  }]);
+
+  return PlayerController;
+}(ECS.Component);
+
+exports.PlayerController = PlayerController;
+},{"../libs/pixi-ecs":"../libs/pixi-ecs/index.ts","./Bomb":"../src/Bomb.ts","./Common":"../src/Common.ts"}],"../src/Player.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Player = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Player = function Player(player_object) {
+  _classCallCheck(this, Player);
+
+  this.speed = 0.007;
+  this.max_bombs_capacity = 1;
+  this.explosion_size = 5;
+  this.bombs_planted = 0;
+  this.score = 0;
+  this.bombs_queue = new Array();
+  this.container = player_object;
+};
+
+exports.Player = Player;
+},{}],"../src/HumanPlayerController.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.HumanPlayerController = void 0;
+
+var ECS = _interopRequireWildcard(require("../libs/pixi-ecs"));
+
+var _PlayerController2 = require("./PlayerController");
+
+var _Common = require("./Common");
+
+var _Player = require("./Player");
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+var HumanPlayerController = /*#__PURE__*/function (_PlayerController) {
+  _inherits(HumanPlayerController, _PlayerController);
+
+  var _super = _createSuper(HumanPlayerController);
+
+  function HumanPlayerController(controls, player_tag) {
+    var _this;
+
+    _classCallCheck(this, HumanPlayerController);
+
+    _this = _super.call(this);
+    _this.controls = controls;
+    _this.player_tag = player_tag;
+    return _this;
+  }
+
+  _createClass(HumanPlayerController, [{
+    key: "onInit",
+    value: function onInit() {
+      this.player = new _Player.Player(this.scene.findObjectByTag(this.player_tag));
+    }
+  }, {
+    key: "onUpdate",
+    value: function onUpdate(delta, absolute) {
+      this.updateGameState();
+      if (window.gs != _Common.GameState.RUNNING) return;
+      this.move(delta, absolute, this.controls);
+
+      if (this.owner.hasFlag(_Common.PlayerFlags.BOMB_TO_PLANT)) {
+        this.plantBomb();
+        this.owner.resetFlag(_Common.PlayerFlags.BOMB_TO_PLANT);
+      }
+
+      this.updateBombs();
+
+      if (this.owner.hasFlag(_Common.PlayerFlags.KILLED) && this.player.bombs_queue.length == 0) {
+        this.owner.scene.stage.removeChild(this.owner);
+        window.gs = _Common.GameState.GAME_OVER;
+        var xxx = new ECS.Container('xxx');
+        this.scene.stage.addChild(xxx);
+        var sprite = new ECS.Sprite('', (0, _Common.createTexture)(0, 0, 800, 600, 'game_over'));
+        sprite.position.x = 0;
+        sprite.position.y = 0;
+        sprite.scale.set(_Common.TEXTURE_SCALE * 0.6);
+        xxx.addChild(sprite);
+        var winner = this.player_tag == _Common.Tags.PLAYER1 ? 'player2' : 'player1';
+        var text = new PIXI.Text(winner + ' WON', {
+          fontWeight: 'bold',
+          letterSpacing: 0.75,
+          fontFamily: 'Arial',
+          fontSize: 3,
+          fill: 0xee33ff,
+          align: 'right'
+        });
+        text.scale.set(0.5);
+        text.position.x = text.position.x + 2;
+        text.position.y = text.position.y + 3;
+        xxx.addChild(text);
+      }
+    }
+  }]);
+
+  return HumanPlayerController;
+}(_PlayerController2.PlayerController);
+
+exports.HumanPlayerController = HumanPlayerController;
+},{"../libs/pixi-ecs":"../libs/pixi-ecs/index.ts","./PlayerController":"../src/PlayerController.ts","./Common":"../src/Common.ts","./Player":"../src/Player.ts"}],"../src/CollisionHandler.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.CollisionHandler = void 0;
+
+var ECS = _interopRequireWildcard(require("../libs/pixi-ecs"));
+
+var _Common = require("./Common");
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-var SCENE_WIDTH = 20;
-var SCENE_HEIGHT = 16;
-var TEXTURE_SCALE = SCENE_WIDTH / (20 * 24);
-var MOVE_CONST = 0.005;
-var _X = 0;
-var _Y = 1;
-var FIRST_PLAYER_CONTROLS = [ECS.Keys.KEY_LEFT, ECS.Keys.KEY_RIGHT, ECS.Keys.KEY_UP, ECS.Keys.KEY_DOWN, ECS.Keys.KEY_SPACE];
-var SECOND_PLAYER_CONTROLS = [ECS.Keys.KEY_A, ECS.Keys.KEY_D, ECS.Keys.KEY_W, ECS.Keys.KEY_S, ECS.Keys.KEY_SHIFT];
-var Tags;
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-(function (Tags) {
-  Tags["BOUNDARY"] = "boundary";
-  Tags["PATH"] = "path";
-  Tags["DANGER"] = "danger";
-  Tags["FLOWER"] = "flower";
-  Tags["PLAYER"] = "player";
-  Tags["AI"] = "ai";
-  Tags["PLAYER1"] = "player1";
-  Tags["PLAYER2"] = "player2";
-  Tags["PLAYER3"] = "player3";
-  Tags["PLAYER4"] = "player4";
-  Tags["FLAME"] = "flame";
-  Tags["BOMB"] = "bomb";
-})(Tags || (Tags = {}));
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-var PlayerFlags;
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-(function (PlayerFlags) {
-  PlayerFlags[PlayerFlags["LEFT_COLLISION"] = 1] = "LEFT_COLLISION";
-  PlayerFlags[PlayerFlags["RIGHT_COLLISION"] = 2] = "RIGHT_COLLISION";
-  PlayerFlags[PlayerFlags["UPPER_COLLISION"] = 3] = "UPPER_COLLISION";
-  PlayerFlags[PlayerFlags["BOTTOM_COLLISION"] = 4] = "BOTTOM_COLLISION";
-  PlayerFlags[PlayerFlags["BOMB_TO_PLANT"] = 5] = "BOMB_TO_PLANT";
-  PlayerFlags[PlayerFlags["KILLED"] = 6] = "KILLED";
-  PlayerFlags[PlayerFlags["IN_DANGER"] = 7] = "IN_DANGER";
-})(PlayerFlags || (PlayerFlags = {}));
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
-var SpriteStateFlags;
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
-(function (SpriteStateFlags) {
-  SpriteStateFlags[SpriteStateFlags["SPRITE_TO_DESTROY"] = 12] = "SPRITE_TO_DESTROY";
-})(SpriteStateFlags || (SpriteStateFlags = {}));
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-function getSpriteAtPos(x_pos, y_pos, tag, scene) {
-  var sprites = scene.findObjectsByTag(tag);
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-  var _iterator = _createForOfIteratorHelper(sprites),
-      _step;
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-  try {
-    for (_iterator.s(); !(_step = _iterator.n()).done;) {
-      var sprite = _step.value;
-      if (sprite.x == x_pos && sprite.y == y_pos) return sprite;
-    }
-  } catch (err) {
-    _iterator.e(err);
-  } finally {
-    _iterator.f();
-  }
-}
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 var CollisionHandler = /*#__PURE__*/function (_ECS$Component) {
   _inherits(CollisionHandler, _ECS$Component);
@@ -60017,50 +60605,50 @@ var CollisionHandler = /*#__PURE__*/function (_ECS$Component) {
     key: "onUpdate",
     value: function onUpdate(delta, absolute) {
       var player = this.owner;
-      var bricks = this.scene.findObjectsByTag(Tags.BOUNDARY);
-      var flowers = this.scene.findObjectsByTag(Tags.FLOWER);
-      var bombs = this.scene.findObjectsByTag(Tags.BOMB);
-      var flames = this.scene.findObjectsByTag(Tags.FLAME);
+      var bricks = this.scene.findObjectsByTag(_Common.Tags.BOUNDARY);
+      var flowers = this.scene.findObjectsByTag(_Common.Tags.FLOWER);
+      var bombs = this.scene.findObjectsByTag(_Common.Tags.BOMB);
+      var flames = this.scene.findObjectsByTag(_Common.Tags.FLAME);
       var colliders = [].concat(_toConsumableArray(bricks), _toConsumableArray(flowers), _toConsumableArray(bombs), _toConsumableArray(flames));
       var playerBox = player.getBounds();
 
-      var _iterator2 = _createForOfIteratorHelper(colliders),
-          _step2;
+      var _iterator = _createForOfIteratorHelper(colliders),
+          _step;
 
       try {
-        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-          var collider = _step2.value;
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var collider = _step.value;
           var cBox = collider.getBounds();
 
-          if (collider.hasTag(Tags.FLAME)) {
+          if (collider.hasTag(_Common.Tags.FLAME)) {
             if (CollisionHandler.absoluteCollision(playerBox, cBox)) {
-              player.setFlag(PlayerFlags.KILLED);
+              player.setFlag(_Common.PlayerFlags.KILLED);
               console.log("player being killed!");
             }
 
             continue;
           }
 
-          if (this.leftCollision(playerBox, cBox, delta * MOVE_CONST)) {
-            player.setFlag(PlayerFlags.LEFT_COLLISION);
+          if (this.leftCollision(playerBox, cBox, delta * _Common.MOVE_CONST)) {
+            player.setFlag(_Common.PlayerFlags.LEFT_COLLISION);
           }
 
-          if (this.rightCollision(playerBox, cBox, delta * MOVE_CONST)) {
-            player.setFlag(PlayerFlags.RIGHT_COLLISION);
+          if (this.rightCollision(playerBox, cBox, delta * _Common.MOVE_CONST)) {
+            player.setFlag(_Common.PlayerFlags.RIGHT_COLLISION);
           }
 
-          if (this.upperCollision(playerBox, cBox, delta * MOVE_CONST)) {
-            player.setFlag(PlayerFlags.UPPER_COLLISION);
+          if (this.upperCollision(playerBox, cBox, delta * _Common.MOVE_CONST)) {
+            player.setFlag(_Common.PlayerFlags.UPPER_COLLISION);
           }
 
-          if (this.bottomCollision(playerBox, cBox, delta * MOVE_CONST)) {
-            player.setFlag(PlayerFlags.BOTTOM_COLLISION);
+          if (this.bottomCollision(playerBox, cBox, delta * _Common.MOVE_CONST)) {
+            player.setFlag(_Common.PlayerFlags.BOTTOM_COLLISION);
           }
         }
       } catch (err) {
-        _iterator2.e(err);
+        _iterator.e(err);
       } finally {
-        _iterator2.f();
+        _iterator.f();
       }
     }
   }, {
@@ -60103,514 +60691,36 @@ var CollisionHandler = /*#__PURE__*/function (_ECS$Component) {
   return CollisionHandler;
 }(ECS.Component);
 
-var Bomb = /*#__PURE__*/function () {
-  function Bomb(scene, origin, size, explosion_time) {
-    _classCallCheck(this, Bomb);
+exports.CollisionHandler = CollisionHandler;
+},{"../libs/pixi-ecs":"../libs/pixi-ecs/index.ts","./Common":"../src/Common.ts"}],"../src/Bomberman.ts":[function(require,module,exports) {
+"use strict";
 
-    this.exploded = false;
-    this.explosion_sprites = new Array();
-    this.danger_sprites = new Array();
-    this.to_destroy = new Array();
-    this.to_destroy2 = new Array();
-    this.origin = origin;
-    this.explosion_size = size;
-    this.explosion_time = explosion_time;
-    this.removal_time = explosion_time + 900;
-    this.scene = scene;
-    this.bomb_layer = scene.getChildByName('bombLayer');
-    this.path_layer = scene.getChildByName('pathLayer');
-    this.plant();
-  }
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Bomberman = void 0;
 
-  _createClass(Bomb, [{
-    key: "plant",
-    value: function plant() {
-      var sprite = new ECS.Sprite('', Bomberman.createTexture(0, 24, 24, 24));
-      sprite.addTag(Tags.BOMB);
-      sprite.scale.set(TEXTURE_SCALE);
-      sprite.position.x = this.origin[_X];
-      sprite.position.y = this.origin[_Y];
-      this.bomb_layer.addChild(sprite);
-      this.bomb_sprite = sprite;
-      this.prepareForExplosion(-1, _X);
-      this.prepareForExplosion(1, _X);
-      this.prepareForExplosion(-1, _Y);
-      this.prepareForExplosion(1, _Y);
-      console.log("bomb planted!");
-    }
-  }, {
-    key: "prepareForExplosion",
-    value: function prepareForExplosion(direction, coordinate) {
-      var flowers = this.scene.scene.findObjectsByTag(Tags.FLOWER);
-      var boundaries = this.scene.scene.findObjectsByTag(Tags.BOUNDARY);
-      var bombs = this.scene.scene.findObjectsByTag(Tags.BOMB);
-      var ai_players = this.scene.scene.findObjectsByTag(Tags.AI); //for (let player of ai_players) player.resetFlag(PlayerFlags.IN_DANGER);
+var ECS = _interopRequireWildcard(require("../libs/pixi-ecs"));
 
-      var colliders = [].concat(_toConsumableArray(boundaries), _toConsumableArray(bombs), _toConsumableArray(flowers), _toConsumableArray(ai_players));
+var _Common = require("./Common");
 
-      for (var i = this.origin[coordinate] + direction; i != this.origin[coordinate] + this.explosion_size * direction; i += direction) {
-        var currX = coordinate == _X ? i : this.origin[_X];
-        var currY = coordinate == _Y ? i : this.origin[_Y];
-        var currentBox = new PIXI.Rectangle(currX, currY, 1, 1);
+var _HumanPlayerController = require("./HumanPlayerController");
 
-        var _iterator3 = _createForOfIteratorHelper(colliders),
-            _step3;
+var _CollisionHandler = require("./CollisionHandler");
 
-        try {
-          for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-            var c = _step3.value;
-            var bbox = c.getBounds();
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
 
-            if (bbox.x == currentBox.x && bbox.y == currentBox.y) {
-              if (c.hasTag(Tags.AI)) {
-                c.setFlag(PlayerFlags.IN_DANGER);
-                c.addTag(Tags.DANGER);
-                console.log("AI in DANGER!!!!!!!!!");
-                continue;
-              }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-              if (c.hasTag(Tags.FLOWER)) {
-                this.to_destroy2.push(c);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-                if (this.to_destroy2.length == 4) {
-                  return;
-                }
-              }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-              return;
-            }
-          }
-        } catch (err) {
-          _iterator3.e(err);
-        } finally {
-          _iterator3.f();
-        }
-
-        var sprite = getSpriteAtPos(currX, currY, Tags.PATH, this.scene.scene);
-        sprite.addTag(Tags.DANGER);
-        sprite.removeTag(Tags.PATH);
-        this.danger_sprites.push(sprite);
-        /*
-        let sprite = new ECS.Sprite('', Bomberman.createTexture(0, 0, 24, 24) );
-        sprite.addTag(Tags.DANGER);
-        sprite.scale.set(TEXTURE_SCALE);
-        sprite.position.x = currX;
-        sprite.position.y = currY;
-        this.path_layer.addChild(sprite);
-        this.danger_sprites.push(sprite); */
-      }
-    }
-  }, {
-    key: "renderExplosion",
-    value: function renderExplosion() {
-      var _iterator4 = _createForOfIteratorHelper(this.danger_sprites),
-          _step4;
-
-      try {
-        for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
-          var x = _step4.value;
-          var sprite = new ECS.Sprite('', Bomberman.createTexture(96, 0, 24, 24));
-          sprite.addTag(Tags.FLAME);
-          sprite.scale.set(TEXTURE_SCALE);
-          sprite.position.x = x.x;
-          sprite.position.y = x.y;
-          this.bomb_layer.addChild(sprite);
-          this.explosion_sprites.push(sprite); //this.path_layer.removeChild(x);
-          //x.removeTag(Tags.DANGER)
-        } //this.danger_sprites = [];
-
-      } catch (err) {
-        _iterator4.e(err);
-      } finally {
-        _iterator4.f();
-      }
-    }
-  }, {
-    key: "destroyHitSprites",
-    value: function destroyHitSprites() {
-      var path_layer = this.scene.getChildByName('pathLayer');
-      var flower_layer = this.scene.getChildByName('flowersLayer');
-
-      var _iterator5 = _createForOfIteratorHelper(this.to_destroy2),
-          _step5;
-
-      try {
-        for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
-          var destroyed = _step5.value;
-          var sprite = new ECS.Sprite('', Bomberman.createTexture(0, 0, 24, 24));
-          sprite.addTag(Tags.PATH);
-          sprite.scale.set(TEXTURE_SCALE);
-          sprite.position.x = destroyed.x;
-          sprite.position.y = destroyed.y;
-          path_layer.addChild(sprite);
-          flower_layer.removeChild(destroyed);
-        }
-      } catch (err) {
-        _iterator5.e(err);
-      } finally {
-        _iterator5.f();
-      }
-
-      this.to_destroy2 = [];
-    }
-  }, {
-    key: "explode",
-    value: function explode() {
-      this.bomb_layer.removeChild(this.bomb_sprite);
-      var sprite = new ECS.Sprite('', Bomberman.createTexture(96, 0, 24, 24));
-      sprite.addTag(Tags.FLAME);
-      sprite.scale.set(TEXTURE_SCALE);
-      sprite.position.x = this.origin[_X];
-      sprite.position.y = this.origin[_Y];
-      this.bomb_layer.addChild(sprite);
-      this.explosion_sprites.push(sprite);
-      this.renderExplosion();
-      console.log("bomb exploded!");
-      this.exploded = true;
-    }
-  }, {
-    key: "cleanExplosion",
-    value: function cleanExplosion() {
-      var _iterator6 = _createForOfIteratorHelper(this.explosion_sprites),
-          _step6;
-
-      try {
-        for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
-          var expl = _step6.value;
-          this.bomb_layer.removeChild(expl);
-        }
-      } catch (err) {
-        _iterator6.e(err);
-      } finally {
-        _iterator6.f();
-      }
-
-      var _iterator7 = _createForOfIteratorHelper(this.danger_sprites),
-          _step7;
-
-      try {
-        for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {
-          var d = _step7.value;
-          d.addTag(Tags.PATH);
-          d.removeTag(Tags.DANGER);
-        }
-      } catch (err) {
-        _iterator7.e(err);
-      } finally {
-        _iterator7.f();
-      }
-
-      this.destroyHitSprites();
-      this.explosion_sprites = [];
-      this.danger_sprites = [];
-      console.log("explosion cleaned!");
-    }
-  }]);
-
-  return Bomb;
-}();
-
-var Player = function Player(player_object) {
-  _classCallCheck(this, Player);
-
-  this.speed = 0.007;
-  this.max_bombs_capacity = 1;
-  this.explosion_size = 5;
-  this.bombs_planted = 0;
-  this.score = 0;
-  this.bombs_queue = new Array();
-  this.container = player_object;
-};
-
-var p_contr;
-
-(function (p_contr) {
-  p_contr[p_contr["_LEFT"] = 0] = "_LEFT";
-  p_contr[p_contr["_RIGHT"] = 1] = "_RIGHT";
-  p_contr[p_contr["_UP"] = 2] = "_UP";
-  p_contr[p_contr["_DOWN"] = 3] = "_DOWN";
-  p_contr[p_contr["_BOMB"] = 4] = "_BOMB";
-})(p_contr || (p_contr = {}));
-
-var PlayerController = /*#__PURE__*/function (_ECS$Component2) {
-  _inherits(PlayerController, _ECS$Component2);
-
-  var _super2 = _createSuper(PlayerController);
-
-  function PlayerController() {
-    _classCallCheck(this, PlayerController);
-
-    return _super2.apply(this, arguments);
-  }
-
-  _createClass(PlayerController, [{
-    key: "moveLeft",
-    value: function moveLeft(units) {
-      var bbox = this.owner.getBounds();
-
-      if (bbox.left > 0) {
-        this.owner.position.x -= Math.min(units, bbox.left);
-      }
-    }
-  }, {
-    key: "moveRight",
-    value: function moveRight(units) {
-      var bbox = this.owner.getBounds();
-
-      if (bbox.right <= SCENE_WIDTH) {
-        this.owner.position.x += Math.min(units, SCENE_WIDTH - bbox.right);
-      }
-    }
-  }, {
-    key: "moveUp",
-    value: function moveUp(units) {
-      var bbox = this.owner.getBounds();
-
-      if (bbox.top > 0) {
-        this.owner.position.y -= Math.min(units, bbox.top);
-      }
-    }
-  }, {
-    key: "moveDown",
-    value: function moveDown(units) {
-      var bbox = this.owner.getBounds();
-
-      if (bbox.bottom <= SCENE_HEIGHT) {
-        this.owner.position.y += Math.min(units, SCENE_HEIGHT - bbox.bottom - 1);
-      }
-    }
-  }, {
-    key: "clipMyPosition",
-    value: function clipMyPosition() {
-      var bbox = this.owner.getBounds();
-      var x_dif = bbox.x - Math.trunc(bbox.x);
-      var y_dif = bbox.y - Math.trunc(bbox.y);
-      if (x_dif > 0.95) this.owner.position.x = Math.ceil(this.owner.position.x);else if (x_dif < 0.05) this.owner.position.x = Math.floor(this.owner.position.x);
-      if (y_dif > 0.95) this.owner.position.y = Math.ceil(this.owner.position.y);else if (y_dif < 0.05) this.owner.position.y = Math.floor(this.owner.position.y);
-    }
-  }, {
-    key: "move",
-    value: function move(delta, absolute, controls) {
-      var keyInputCmp = this.scene.findGlobalComponentByName(ECS.KeyInputComponent.name);
-
-      if (keyInputCmp.isKeyPressed(controls[p_contr._LEFT])) {
-        if (this.owner.hasFlag(PlayerFlags.LEFT_COLLISION)) keyInputCmp.handleKey(controls[p_contr._LEFT]);else this.moveLeft(delta * 0.01);
-      }
-
-      if (keyInputCmp.isKeyPressed(controls[p_contr._RIGHT])) {
-        if (this.owner.hasFlag(PlayerFlags.RIGHT_COLLISION)) keyInputCmp.handleKey(controls[p_contr._RIGHT]);else this.moveRight(delta * 0.01);
-      }
-
-      if (keyInputCmp.isKeyPressed(controls[p_contr._DOWN])) {
-        if (this.owner.hasFlag(PlayerFlags.BOTTOM_COLLISION)) keyInputCmp.handleKey(controls[p_contr._DOWN]);else this.moveDown(delta * 0.01);
-      }
-
-      if (keyInputCmp.isKeyPressed(controls[p_contr._UP])) {
-        if (this.owner.hasFlag(PlayerFlags.UPPER_COLLISION)) keyInputCmp.handleKey(controls[p_contr._UP]);else this.moveUp(delta * 0.01);
-      }
-
-      if (keyInputCmp.isKeyPressed(controls[p_contr._BOMB])) {
-        this.owner.setFlag(PlayerFlags.BOMB_TO_PLANT);
-        keyInputCmp.handleKey(controls[p_contr._BOMB]);
-      }
-
-      for (var i = 1; i <= 4; i++) {
-        this.owner.resetFlag(i);
-      }
-
-      this.clipMyPosition();
-    }
-  }, {
-    key: "plantBomb",
-    value: function plantBomb() {
-      if (this.player.bombs_planted < this.player.max_bombs_capacity) {
-        var now = Date.now();
-        this.player.bombs_planted++;
-        var b = new Bomb(this.scene.stage, [Math.round(this.owner.position.x), Math.round(this.owner.position.y)], this.player.explosion_size, now + 1500);
-        this.player.bombs_queue.push(b);
-      }
-    }
-  }, {
-    key: "updateBombs",
-    value: function updateBombs() {
-      if (this.player.bombs_queue.length > 0) {
-        var bomb = this.player.bombs_queue[0];
-
-        if (bomb.explosion_time < Date.now() && !bomb.exploded) {
-          bomb.explode();
-        } else if (bomb.exploded && bomb.removal_time < Date.now()) {
-          bomb.cleanExplosion();
-          this.player.bombs_queue.shift();
-          this.player.bombs_planted--;
-        }
-      }
-    }
-  }]);
-
-  return PlayerController;
-}(ECS.Component);
-
-var HumanPlayerController = /*#__PURE__*/function (_PlayerController) {
-  _inherits(HumanPlayerController, _PlayerController);
-
-  var _super3 = _createSuper(HumanPlayerController);
-
-  function HumanPlayerController(controls, player_tag) {
-    var _this;
-
-    _classCallCheck(this, HumanPlayerController);
-
-    _this = _super3.call(this);
-    _this.controls = controls;
-    _this.player_tag = player_tag;
-    return _this;
-  }
-
-  _createClass(HumanPlayerController, [{
-    key: "onInit",
-    value: function onInit() {
-      this.player = new Player(this.scene.findObjectByTag(this.player_tag));
-    }
-  }, {
-    key: "onUpdate",
-    value: function onUpdate(delta, absolute) {
-      this.move(delta, absolute, this.controls);
-
-      if (this.owner.hasFlag(PlayerFlags.BOMB_TO_PLANT)) {
-        this.plantBomb();
-        this.owner.resetFlag(PlayerFlags.BOMB_TO_PLANT);
-      }
-
-      this.updateBombs();
-
-      if (this.owner.hasFlag(PlayerFlags.KILLED) && this.player.bombs_queue.length == 0) {
-        this.owner.scene.stage.removeChild(this.owner);
-      }
-    }
-  }]);
-
-  return HumanPlayerController;
-}(PlayerController);
-
-var AIController = /*#__PURE__*/function (_PlayerController2) {
-  _inherits(AIController, _PlayerController2);
-
-  var _super4 = _createSuper(AIController);
-
-  function AIController(player_tag) {
-    var _this2;
-
-    _classCallCheck(this, AIController);
-
-    _this2 = _super4.call(this);
-    _this2.is_safetile_set = false;
-    _this2.is_moving = false;
-    _this2.player_tag = player_tag;
-    return _this2;
-  }
-
-  _createClass(AIController, [{
-    key: "onInit",
-    value: function onInit() {
-      this.player = new Player(this.scene.findObjectByTag(this.player_tag));
-    }
-  }, {
-    key: "onUpdate",
-    value: function onUpdate(delta, absolute) {
-      /*if (this.is_safetile_set == true) {
-          if (this.owner.x < this.safe_tile.x && !this.owner.hasFlag(PlayerFlags.RIGHT_COLLISION)) this.moveRight(delta*0.01);
-          if (this.owner.x > this.safe_tile.x && !this.owner.hasFlag(PlayerFlags.LEFT_COLLISION)) this.moveLeft(delta*0.01);
-          if (this.owner.y < this.safe_tile.y && !this.owner.hasFlag(PlayerFlags.BOTTOM_COLLISION)) this.moveDown(delta*0.01);
-          if (this.owner.y > this.safe_tile.y && !this.owner.hasFlag(PlayerFlags.UPPER_COLLISION)) this.moveUp(delta*0.01);
-          if ((Math.round(this.owner.x * 100) / 100 == this.safe_tile.x && Math.round(this.owner.y * 100) / 100 == this.safe_tile.y)
-              || this.isSafe()) {
-                  this.is_safetile_set = false;
-                  this.owner.removeTag(Tags.DANGER);
-                  this.owner.resetFlag(PlayerFlags.IN_DANGER);
-              }
-          return;
-      }*/
-      if (!this.isSafe()) {
-        // todo : find safe place
-        if (!this.is_safetile_set) {
-          this.sourcepos = [Math.round(this.owner.x), Math.round(this.owner.y)];
-          this.is_safetile_set = true;
-        }
-
-        var left = getSpriteAtPos(this.sourcepos[0], this.sourcepos[1], Tags.PATH, this.owner.scene);
-        var right = getSpriteAtPos(this.sourcepos[0], this.sourcepos[1], Tags.PATH, this.owner.scene);
-        var up = getSpriteAtPos(this.sourcepos[0], this.sourcepos[1], Tags.PATH, this.owner.scene);
-        var down = getSpriteAtPos(this.sourcepos[0], this.sourcepos[1], Tags.PATH, this.owner.scene);
-
-        if (!this.owner.hasFlag(PlayerFlags.RIGHT_COLLISION) && right) {
-          this.moveRight(delta * 0.01);
-          this.is_safetile_set = true;
-          return;
-        }
-
-        if (!this.owner.hasFlag(PlayerFlags.LEFT_COLLISION) && left) {
-          this.moveLeft(delta * 0.01);
-          this.is_safetile_set = true;
-          return;
-        }
-
-        if (!this.owner.hasFlag(PlayerFlags.UPPER_COLLISION) && up) {
-          this.moveUp(delta * 0.01);
-          this.is_safetile_set = true;
-          return;
-        }
-
-        if (!this.owner.hasFlag(PlayerFlags.BOTTOM_COLLISION) && down) {
-          this.moveDown(delta * 0.01);
-          this.is_safetile_set = true;
-          return;
-        } //this.safe_tile = this.getSafeTile();
-        //this.is_safetile_set = true;
-        // this.owner.removeTag(Tags.DANGER);
-
-      } else {
-        this.is_safetile_set = false;
-        this.owner.removeTag(Tags.DANGER);
-        this.owner.resetFlag(PlayerFlags.IN_DANGER); // todo : other interesting things
-      }
-    }
-  }, {
-    key: "isSafe",
-    value: function isSafe() {
-      return !this.owner.hasFlag(PlayerFlags.IN_DANGER) || !this.owner.hasTag(Tags.DANGER);
-    }
-  }, {
-    key: "getSafeTile",
-    value: function getSafeTile() {
-      var path_layer = this.owner.parent.getChildByName('pathLayer');
-
-      var _iterator8 = _createForOfIteratorHelper(path_layer.children),
-          _step8;
-
-      try {
-        for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {
-          var tile = _step8.value;
-          var t = tile;
-
-          if (t.hasTag(Tags.PATH) && Math.abs(t.x - this.owner.x) < 4 && Math.abs(t.y - this.owner.y) < 4) {
-            console.log("Safety is at: ", t.x, " ", t.y);
-            return t;
-          }
-        }
-      } catch (err) {
-        _iterator8.e(err);
-      } finally {
-        _iterator8.f();
-      }
-    }
-  }]);
-
-  return AIController;
-}(PlayerController);
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 var Bomberman = /*#__PURE__*/function () {
   function Bomberman() {
-    var _this3 = this;
+    var _this = this;
 
     _classCallCheck(this, Bomberman);
 
@@ -60619,12 +60729,12 @@ var Bomberman = /*#__PURE__*/function () {
     this.engine.init(canvas, {
       width: 800,
       height: 600,
-      resolution: 800 / SCENE_WIDTH,
+      resolution: 800 / _Common.SCENE_WIDTH,
       resizeToScreen: true,
       flagsSearchEnabled: true
     });
-    this.engine.app.loader.reset().add('spritesheet', './assets/spritesheet.png').load(function () {
-      return _this3.load();
+    this.engine.app.loader.reset().add('spritesheet', './assets/spritesheet.png').add('start_game', './assets/start_game.png').add('game_over', './assets/game_over.png').load(function () {
+      return _this.load();
     });
   }
 
@@ -60644,39 +60754,45 @@ var Bomberman = /*#__PURE__*/function () {
       this.generateMap(path, flowers, boundaries);
       this.drawBoundaries(boundaries);
       this.createPlayers();
+      var xxx = new ECS.Container('xxx');
+      scene.stage.addChild(xxx);
+      this.start_game_tex = new ECS.Sprite('', Bomberman.createTexture(0, 0, 800, 600, 'start_game'));
+      this.start_game_tex.position.x = 0;
+      this.start_game_tex.position.y = 0;
+      this.start_game_tex.scale.set(_Common.TEXTURE_SCALE * 0.6);
+      xxx.addChild(this.start_game_tex);
+      window.gs = _Common.GameState.START;
     }
   }, {
     key: "createPlayers",
     value: function createPlayers() {
-      new ECS.Builder(this.engine.scene).anchor(0).localPos(1, 1).withTag(Tags.PLAYER1).withTag(Tags.PLAYER).asSprite(Bomberman.createTexture(72, 0, 24, 24)).withParent(this.engine.scene.stage).withComponent(new CollisionHandler()).withComponent(new HumanPlayerController(FIRST_PLAYER_CONTROLS, Tags.PLAYER1)).scale(TEXTURE_SCALE).build();
-      new ECS.Builder(this.engine.scene).anchor(0).localPos(SCENE_WIDTH - 2, 1).withTag(Tags.PLAYER2).withTag(Tags.PLAYER).asSprite(Bomberman.createTexture(48, 24, 24, 24)).withParent(this.engine.scene.stage).withComponent(new CollisionHandler()).withComponent(new HumanPlayerController(SECOND_PLAYER_CONTROLS, Tags.PLAYER2)).scale(TEXTURE_SCALE).build();
-      new ECS.Builder(this.engine.scene).anchor(0).localPos(1, SCENE_HEIGHT - 3).withTag(Tags.PLAYER3).withTag(Tags.AI).asSprite(Bomberman.createTexture(24, 24, 24, 24)).withParent(this.engine.scene.stage).withComponent(new CollisionHandler()).withComponent(new AIController(Tags.AI)).scale(TEXTURE_SCALE).build();
-      new ECS.Builder(this.engine.scene).anchor(0).localPos(SCENE_WIDTH - 2, SCENE_HEIGHT - 3).withTag(Tags.PLAYER4).withTag(Tags.AI).asSprite(Bomberman.createTexture(72, 24, 24, 24)).withParent(this.engine.scene.stage).withComponent(new CollisionHandler()).withComponent(new AIController(Tags.AI)).scale(TEXTURE_SCALE).build();
+      new ECS.Builder(this.engine.scene).anchor(0).localPos(1, 1).withTag(_Common.Tags.PLAYER1).withTag(_Common.Tags.PLAYER).asSprite(Bomberman.createTexture(72, 0, 24, 24)).withParent(this.engine.scene.stage).withComponent(new _CollisionHandler.CollisionHandler()).withComponent(new _HumanPlayerController.HumanPlayerController(_Common.FIRST_PLAYER_CONTROLS, _Common.Tags.PLAYER1)).scale(_Common.TEXTURE_SCALE).build();
+      new ECS.Builder(this.engine.scene).anchor(0).localPos(_Common.SCENE_WIDTH - 2, 1).withTag(_Common.Tags.PLAYER2).withTag(_Common.Tags.PLAYER).asSprite(Bomberman.createTexture(48, 24, 24, 24)).withParent(this.engine.scene.stage).withComponent(new _CollisionHandler.CollisionHandler()).withComponent(new _HumanPlayerController.HumanPlayerController(_Common.SECOND_PLAYER_CONTROLS, _Common.Tags.PLAYER2)).scale(_Common.TEXTURE_SCALE).build();
     }
   }, {
     key: "generateMap",
     value: function generateMap(path, flowers, walls) {
-      for (var i = 1; i < SCENE_WIDTH - 1; i++) {
-        for (var j = 1; j < SCENE_HEIGHT - 2; j++) {
+      for (var i = 1; i < _Common.SCENE_WIDTH - 1; i++) {
+        for (var j = 1; j < _Common.SCENE_HEIGHT - 2; j++) {
           var x = Math.random() * 100;
 
-          if (i == 1 && j == 1 || i == 18 && j == 1 || i == 18 && j == 13 || i == 1 && j == 13) {
+          if (i == 1 && j == 1 || i == 18 && j == 1) {
             x = 50;
           }
 
           if (x < 30) {
             var sprite = new ECS.Sprite('', Bomberman.createTexture(24, 0, 24, 24));
-            sprite.addTag(Tags.FLOWER);
-            sprite.scale.set(TEXTURE_SCALE);
+            sprite.addTag(_Common.Tags.FLOWER);
+            sprite.scale.set(_Common.TEXTURE_SCALE);
             sprite.position.x = i;
             sprite.position.y = j;
             flowers.addChild(sprite);
           } else if (x < 35) {
             var _sprite = new ECS.Sprite('', Bomberman.createTexture(48, 0, 24, 24));
 
-            _sprite.addTag(Tags.BOUNDARY);
+            _sprite.addTag(_Common.Tags.BOUNDARY);
 
-            _sprite.scale.set(TEXTURE_SCALE);
+            _sprite.scale.set(_Common.TEXTURE_SCALE);
 
             _sprite.position.x = i;
             _sprite.position.y = j;
@@ -60684,9 +60800,9 @@ var Bomberman = /*#__PURE__*/function () {
           } else {
             var _sprite2 = new ECS.Sprite('', Bomberman.createTexture(0, 0, 24, 24));
 
-            _sprite2.addTag(Tags.PATH);
+            _sprite2.addTag(_Common.Tags.PATH);
 
-            _sprite2.scale.set(TEXTURE_SCALE);
+            _sprite2.scale.set(_Common.TEXTURE_SCALE);
 
             _sprite2.position.x = i;
             _sprite2.position.y = j;
@@ -60699,32 +60815,32 @@ var Bomberman = /*#__PURE__*/function () {
     key: "drawBoundaries",
     value: function drawBoundaries(boundaries) {
       // render upper and lower boundaries
-      for (var i = 0; i < SCENE_WIDTH; i++) {
+      for (var i = 0; i < _Common.SCENE_WIDTH; i++) {
         var sprite1 = new ECS.Sprite('', Bomberman.createTexture(48, 0, 24, 24));
-        sprite1.addTag(Tags.BOUNDARY);
-        sprite1.scale.set(TEXTURE_SCALE);
+        sprite1.addTag(_Common.Tags.BOUNDARY);
+        sprite1.scale.set(_Common.TEXTURE_SCALE);
         sprite1.position.x = i;
         sprite1.position.y = 0;
         boundaries.addChild(sprite1);
         var sprite2 = new ECS.Sprite('', Bomberman.createTexture(48, 0, 24, 24));
-        sprite2.addTag(Tags.BOUNDARY);
-        sprite2.scale.set(TEXTURE_SCALE);
+        sprite2.addTag(_Common.Tags.BOUNDARY);
+        sprite2.scale.set(_Common.TEXTURE_SCALE);
         sprite2.position.x = i;
-        sprite2.position.y = SCENE_HEIGHT - 2;
+        sprite2.position.y = _Common.SCENE_HEIGHT - 2;
         boundaries.addChild(sprite2);
       }
 
-      for (var _i = 0; _i < SCENE_HEIGHT; _i++) {
+      for (var _i = 0; _i < _Common.SCENE_HEIGHT; _i++) {
         var sprite3 = new ECS.Sprite('', Bomberman.createTexture(48, 0, 24, 24));
-        sprite3.addTag(Tags.BOUNDARY);
-        sprite3.scale.set(TEXTURE_SCALE);
+        sprite3.addTag(_Common.Tags.BOUNDARY);
+        sprite3.scale.set(_Common.TEXTURE_SCALE);
         sprite3.position.x = 0;
         sprite3.position.y = _i;
         boundaries.addChild(sprite3);
         var sprite4 = new ECS.Sprite('', Bomberman.createTexture(48, 0, 24, 24));
-        sprite4.addTag(Tags.BOUNDARY);
-        sprite4.scale.set(TEXTURE_SCALE);
-        sprite4.position.x = SCENE_WIDTH - 1;
+        sprite4.addTag(_Common.Tags.BOUNDARY);
+        sprite4.scale.set(_Common.TEXTURE_SCALE);
+        sprite4.position.x = _Common.SCENE_WIDTH - 1;
         sprite4.position.y = _i;
         boundaries.addChild(sprite4);
       }
@@ -60732,7 +60848,8 @@ var Bomberman = /*#__PURE__*/function () {
   }], [{
     key: "createTexture",
     value: function createTexture(offsetX, offsetY, width, height) {
-      var texture = PIXI.Texture.from('spritesheet');
+      var name = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 'spritesheet';
+      var texture = PIXI.Texture.from(name);
       texture = texture.clone();
       texture.frame = new PIXI.Rectangle(offsetX, offsetY, width, height);
       return texture;
@@ -60742,10 +60859,607 @@ var Bomberman = /*#__PURE__*/function () {
   return Bomberman;
 }();
 
-var _default = new Bomberman();
+exports.Bomberman = Bomberman;
+},{"../libs/pixi-ecs":"../libs/pixi-ecs/index.ts","./Common":"../src/Common.ts","./HumanPlayerController":"../src/HumanPlayerController.ts","./CollisionHandler":"../src/CollisionHandler.ts"}],"../src/my-game.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _Bomberman = require("./Bomberman");
+
+/*
+const SCENE_WIDTH = 20;
+const SCENE_HEIGHT = 16;
+const TEXTURE_SCALE = SCENE_WIDTH / (20 * 24);
+const MOVE_CONST = 0.005;
+const _X = 0;
+const _Y = 1;
+enum GameState { START, RUNNING, GAME_OVER }
+let gs: GameState;
+const FIRST_PLAYER_CONTROLS:  [ECS.Keys, ECS.Keys, ECS.Keys, ECS.Keys, ECS.Keys]
+                            = [ECS.Keys.KEY_LEFT, ECS.Keys.KEY_RIGHT, ECS.Keys.KEY_UP, ECS.Keys.KEY_DOWN, ECS.Keys.KEY_SPACE];
+const SECOND_PLAYER_CONTROLS: [ECS.Keys, ECS.Keys, ECS.Keys, ECS.Keys, ECS.Keys]
+                            = [ECS.Keys.KEY_A, ECS.Keys.KEY_D, ECS.Keys.KEY_W, ECS.Keys.KEY_S, ECS.Keys.KEY_SHIFT];
+
+enum Tags {
+    BOUNDARY = 'boundary',
+    PATH = 'path',
+    DANGER = 'danger',
+    FLOWER = 'flower',
+    PLAYER = 'player',
+    AI = 'ai',
+    PLAYER1 = 'player1',
+    PLAYER2 = 'player2',
+    PLAYER3 = 'player3',
+    PLAYER4 = 'player4',
+    FLAME = 'flame',
+    BOMB = 'bomb'
+}
+
+enum PlayerFlags {
+    LEFT_COLLISION = 1, RIGHT_COLLISION = 2, UPPER_COLLISION = 3, BOTTOM_COLLISION = 4, BOMB_TO_PLANT = 5, KILLED = 6, IN_DANGER = 7
+}
+
+function getSpriteAtPos(x_pos: number, y_pos: number, tag: string, scene: ECS.Scene) {
+    let sprites = scene.findObjectsByTag(tag);
+    for (let sprite of sprites) {
+        if (sprite.x == x_pos && sprite.y == y_pos) return sprite;
+    }
+} */
+
+/*
+class CollisionHandler extends ECS.Component {
+    onUpdate(delta: number, absolute: number) {
+        let player = this.owner;
+        const bricks = this.scene.findObjectsByTag(Tags.BOUNDARY);
+        const flowers = this.scene.findObjectsByTag(Tags.FLOWER);
+        const bombs = this.scene.findObjectsByTag(Tags.BOMB);
+        const flames = this.scene.findObjectsByTag(Tags.FLAME);
+
+        let colliders = [...bricks, ...flowers, ...bombs, ...flames];
+        
+        const playerBox = player.getBounds();
+        
+        for (let collider of colliders) {
+            const cBox = collider.getBounds();
+            if (collider.hasTag(Tags.FLAME)) {
+                if (CollisionHandler.absoluteCollision(playerBox, cBox)) {
+                    player.setFlag(PlayerFlags.KILLED);
+                    console.log("player being killed!");
+                }
+                continue;
+            }
+            if (this.leftCollision(playerBox, cBox, delta * MOVE_CONST)) {
+                player.setFlag(PlayerFlags.LEFT_COLLISION);
+            }
+            if (this.rightCollision(playerBox, cBox, delta * MOVE_CONST)) {
+                player.setFlag(PlayerFlags.RIGHT_COLLISION);
+            }
+            if (this.upperCollision(playerBox, cBox, delta * MOVE_CONST)) {
+                player.setFlag(PlayerFlags.UPPER_COLLISION);
+            }
+            if (this.bottomCollision(playerBox, cBox, delta * MOVE_CONST)) {
+                player.setFlag(PlayerFlags.BOTTOM_COLLISION);
+            }
+        }
+    }
+
+    private leftCollision(myBounds: PIXI.Rectangle, otherBounds: PIXI.Rectangle, step: number) {
+        return (myBounds.left - step < otherBounds.right && myBounds.left > otherBounds.left) && (Math.min(myBounds.bottom, otherBounds.bottom) - Math.max(myBounds.top, otherBounds.top)) > 0;
+    }
+
+    private rightCollision(myBounds: PIXI.Rectangle, otherBounds: PIXI.Rectangle, step: number) {
+        return (myBounds.right + step > otherBounds.left && myBounds.right < otherBounds.right) && ((Math.min(myBounds.bottom, otherBounds.bottom) - Math.max(myBounds.top, otherBounds.top)) > 0);
+    }
+
+    private upperCollision(myBounds: PIXI.Rectangle, otherBounds: PIXI.Rectangle, step: number) {
+        return Math.min(myBounds.right, otherBounds.right) - Math.max(myBounds.left, otherBounds.left) > 0 && otherBounds.bottom > myBounds.top - step && otherBounds.top < myBounds.top;
+    }
+
+    private bottomCollision(myBounds: PIXI.Rectangle, otherBounds: PIXI.Rectangle, step: number) {
+        return Math.min(myBounds.right, otherBounds.right) - Math.max(myBounds.left, otherBounds.left) > 0 && otherBounds.top < myBounds.bottom + step && otherBounds.bottom > myBounds.bottom;
+    }
+
+    public static horizontalIntersection(first: PIXI.Rectangle, second: PIXI.Rectangle) {
+        return Math.min(first.right, second.right) - Math.max(first.left, second.left);
+    }
+    public static verticalIntersection(first: PIXI.Rectangle, second: PIXI.Rectangle) {
+        return Math.min(first.bottom, second.bottom) - Math.max(first.top, second.top);
+    }
+
+    public static absoluteCollision(first: PIXI.Rectangle, second: PIXI.Rectangle) {
+        return (CollisionHandler.horizontalIntersection(first, second) > 0) && (CollisionHandler.verticalIntersection(first, second) > 0);
+    }
+}
+
+
+class Bomb {
+    exploded: boolean = false;
+    origin: [number, number];
+    explosion_size: number;
+    bomb_sprite: ECS.Sprite;
+    explosion_sprites: Array<ECS.Sprite> = new Array<ECS.Sprite>();
+    danger_sprites: Array<ECS.Sprite> = new Array<ECS.Sprite>();
+    bomb_layer: ECS.Container;
+    path_layer: ECS.Container;
+    explosion_time: number;
+    removal_time: number;
+    scene: ECS.Container;
+    to_destroy: Array<[number, number]> = new Array<[number, number]>();
+    to_destroy2: Array<ECS.Container> = new Array<ECS.Container>();
+
+    constructor(scene: ECS.Container, origin: [number, number], size: number, explosion_time: number) {
+        this.origin = origin;
+        this.explosion_size = size;
+        this.explosion_time = explosion_time;
+        this.removal_time = explosion_time + 900;
+        this.scene = scene;
+        this.bomb_layer = scene.getChildByName('bombLayer') as ECS.Container;
+        this.path_layer = scene.getChildByName('pathLayer') as ECS.Container;
+        this.plant();
+    }
+
+    plant() {
+        let sprite = new ECS.Sprite('', Bomberman.createTexture(0, 24, 24, 24) );
+        sprite.addTag(Tags.BOMB);
+        sprite.scale.set(TEXTURE_SCALE);
+        sprite.position.x = this.origin[_X];
+        sprite.position.y = this.origin[_Y];
+
+        this.bomb_layer.addChild(sprite);
+        this.bomb_sprite = sprite;
+        this.prepareForExplosion(-1, _X);
+        this.prepareForExplosion( 1, _X);
+        this.prepareForExplosion(-1, _Y);
+        this.prepareForExplosion( 1, _Y);
+        console.log("bomb planted!");
+    }
+
+    prepareForExplosion(direction: number, coordinate: number) {
+        let flowers = this.scene.scene.findObjectsByTag(Tags.FLOWER);
+        let boundaries = this.scene.scene.findObjectsByTag(Tags.BOUNDARY);
+        let bombs = this.scene.scene.findObjectsByTag(Tags.BOMB);
+        let ai_players = this.scene.scene.findObjectsByTag(Tags.AI);
+        //for (let player of ai_players) player.resetFlag(PlayerFlags.IN_DANGER);
+
+        let colliders = [...boundaries, ...bombs, ...flowers, ...ai_players];
+        
+        for (let i = this.origin[coordinate] + direction; i != this.origin[coordinate] + this.explosion_size * direction ; i += direction) {
+            let currX = coordinate == _X ? i : this.origin[_X];
+            let currY = coordinate == _Y ? i : this.origin[_Y];
+            let currentBox = new PIXI.Rectangle(currX, currY, 1, 1);
+
+            for (let c of colliders) {
+                let bbox = c.getBounds();
+
+                if (bbox.x == currentBox.x && bbox.y == currentBox.y) {
+                    if (c.hasTag(Tags.AI)) {
+                        c.setFlag(PlayerFlags.IN_DANGER);
+                        c.addTag(Tags.DANGER);
+                        console.log("AI in DANGER!!!!!!!!!");
+                        continue;
+                    }
+                    if (c.hasTag(Tags.FLOWER)) {
+                        this.to_destroy2.push(c);
+                        if (this.to_destroy2.length == 4) { return; }
+                    }
+                    return;
+                }
+            }
+            let sprite = getSpriteAtPos(currX, currY, Tags.PATH, this.scene.scene);
+            sprite.addTag(Tags.DANGER);
+            sprite.removeTag(Tags.PATH);
+            this.danger_sprites.push(sprite as ECS.Sprite);
+           
+            }
+    }
+    
+
+    renderExplosion() {
+        for (let x of this.danger_sprites) {
+            let sprite = new ECS.Sprite('', Bomberman.createTexture(96, 0, 24, 24) );
+            sprite.addTag(Tags.FLAME);
+            sprite.scale.set(TEXTURE_SCALE);
+            sprite.position.x = x.x;
+            sprite.position.y = x.y;
+            this.bomb_layer.addChild(sprite);
+            this.explosion_sprites.push(sprite);
+        }
+    }
+
+    destroyHitSprites() {
+        let path_layer = this.scene.getChildByName('pathLayer') as ECS.Container;
+        let flower_layer = this.scene.getChildByName('flowersLayer') as ECS.Container;
+
+        for (let destroyed of this.to_destroy2) {
+            let sprite = new ECS.Sprite('', Bomberman.createTexture(0, 0, 24, 24) );
+            sprite.addTag(Tags.PATH);
+            sprite.scale.set(TEXTURE_SCALE);
+            sprite.position.x = destroyed.x;
+            sprite.position.y = destroyed.y;
+            path_layer.addChild(sprite);
+            flower_layer.removeChild(destroyed);
+        }
+        this.to_destroy2 = [];
+    }
+    
+    explode() {
+        this.bomb_layer.removeChild(this.bomb_sprite);
+    
+        let sprite = new ECS.Sprite('', Bomberman.createTexture(96, 0, 24, 24) );
+        sprite.addTag(Tags.FLAME);
+        sprite.scale.set(TEXTURE_SCALE);
+        sprite.position.x = this.origin[_X];
+        sprite.position.y = this.origin[_Y];
+
+        this.bomb_layer.addChild(sprite);
+        this.explosion_sprites.push(sprite);
+        this.renderExplosion();
+
+        console.log("bomb exploded!");
+        this.exploded = true;
+    }
+    cleanExplosion() {
+            for (let expl of this.explosion_sprites) { this.bomb_layer.removeChild(expl); }
+            for (let d of this.danger_sprites) { d.addTag(Tags.PATH); d.removeTag(Tags.DANGER); }
+            this.destroyHitSprites();
+            this.explosion_sprites = [];
+            this.danger_sprites = [];
+            console.log("explosion cleaned!");
+        
+    }
+}
+
+class Player {
+    container: ECS.Container;
+    speed: number = 0.007;
+    max_bombs_capacity: number = 1;
+    explosion_size: number = 5;
+    bombs_planted: number = 0;
+    score: number = 0;
+    bombs_queue: Array<Bomb> = new Array<Bomb>();
+
+    constructor(player_object: any){
+       this.container = player_object;
+    }
+}
+
+enum p_contr {
+    _LEFT = 0, _RIGHT = 1, _UP = 2, _DOWN = 3, _BOMB = 4
+}
+
+class PlayerController extends ECS.Component {
+    player: Player;
+    player_tag: string;
+
+    moveLeft(units: number) {
+        const bbox = this.owner.getBounds();
+        if (bbox.left > 0) {
+            this.owner.position.x -= Math.min(units, bbox.left);
+        }
+    }
+    
+    moveRight(units: number) {
+        const bbox = this.owner.getBounds();
+        if (bbox.right <= SCENE_WIDTH) {
+            this.owner.position.x += Math.min(units, SCENE_WIDTH - bbox.right );
+        }
+    }
+    moveUp(units: number) {
+        const bbox = this.owner.getBounds();
+        if (bbox.top > 0) {
+            this.owner.position.y -= Math.min(units, bbox.top);
+        }
+    }
+    moveDown(units: number) {
+        const bbox = this.owner.getBounds();
+        if (bbox.bottom <= SCENE_HEIGHT) {
+            this.owner.position.y += Math.min(units, SCENE_HEIGHT - bbox.bottom - 1);
+        }
+    }
+
+    clipMyPosition() {
+        const bbox = this.owner.getBounds();
+        let x_dif = bbox.x - Math.trunc(bbox.x);
+        let y_dif = bbox.y - Math.trunc(bbox.y);
+
+        if (x_dif > 0.95) this.owner.position.x = Math.ceil(this.owner.position.x);
+        else if (x_dif < 0.05) this.owner.position.x = Math.floor(this.owner.position.x);
+
+        if (y_dif > 0.95) this.owner.position.y = Math.ceil(this.owner.position.y);
+        else if (y_dif < 0.05) this.owner.position.y = Math.floor(this.owner.position.y);
+    }
+
+    move(delta: number, absolute: number, controls: [ECS.Keys, ECS.Keys, ECS.Keys, ECS.Keys, ECS.Keys]) {
+        const keyInputCmp = this.scene.findGlobalComponentByName<ECS.KeyInputComponent>(ECS.KeyInputComponent.name);
+        if (gs == GameState.START && keyInputCmp.isKeyPressed(ECS.Keys.KEY_S)) {
+            gs = GameState.RUNNING;
+            return;
+        }
+       
+        if (keyInputCmp.isKeyPressed(controls[p_contr._LEFT])) {
+            if (this.owner.hasFlag(PlayerFlags.LEFT_COLLISION)) keyInputCmp.handleKey(controls[p_contr._LEFT]);
+            else this.moveLeft(delta * 0.01);
+        }
+        if (keyInputCmp.isKeyPressed(controls[p_contr._RIGHT])) {
+            if (this.owner.hasFlag(PlayerFlags.RIGHT_COLLISION)) keyInputCmp.handleKey(controls[p_contr._RIGHT]);
+            else this.moveRight(delta * 0.01);
+        }
+        
+        if (keyInputCmp.isKeyPressed(controls[p_contr._DOWN])) {
+            if (this.owner.hasFlag(PlayerFlags.BOTTOM_COLLISION)) keyInputCmp.handleKey(controls[p_contr._DOWN]);
+            else this.moveDown(delta * 0.01);
+        }
+        if (keyInputCmp.isKeyPressed(controls[p_contr._UP])) {
+            if (this.owner.hasFlag(PlayerFlags.UPPER_COLLISION)) keyInputCmp.handleKey(controls[p_contr._UP]);
+            else this.moveUp(delta * 0.01);
+        }
+        
+        if (keyInputCmp.isKeyPressed(controls[p_contr._BOMB]) ) {
+            this.owner.setFlag(PlayerFlags.BOMB_TO_PLANT);
+            keyInputCmp.handleKey(controls[p_contr._BOMB]);
+        }
+        for (let i = 1; i <= 4; i++) this.owner.resetFlag(i);
+
+        this.clipMyPosition();
+    }
+
+    plantBomb() {
+        if (this.player.bombs_planted < this.player.max_bombs_capacity) {
+            let now = Date.now();
+            this.player.bombs_planted++;
+            let b = new Bomb(this.scene.stage, [Math.round(this.owner.position.x), Math.round(this.owner.position.y)],
+                             this.player.explosion_size, now + 1500);
+            this.player.bombs_queue.push(b);
+        }
+    }
+
+    updateGameState() {
+        if (gs != GameState.START) return;
+
+        const keyInputCmp = this.scene.findGlobalComponentByName<ECS.KeyInputComponent>(ECS.KeyInputComponent.name);
+        if (keyInputCmp.isKeyPressed(ECS.Keys.KEY_S)) {
+            keyInputCmp.handleKey(ECS.Keys.KEY_S);
+            let a = this.scene.stage.getChildByName('xxx');
+            
+            this.scene.stage.removeChild(a);
+            a.destroy();
+            gs = GameState.RUNNING;
+            console.log("GAME IS RUNNING!!!");
+        }
+    }
+
+    updateBombs() {
+        if (this.player.bombs_queue.length > 0) {
+            let bomb = this.player.bombs_queue[0];
+
+            if (bomb.explosion_time < Date.now() && !bomb.exploded) {
+                bomb.explode();
+            }
+            else if (bomb.exploded && bomb.removal_time < Date.now()) {
+                bomb.cleanExplosion();
+                
+                this.player.bombs_queue.shift();
+                this.player.bombs_planted--;
+            }
+        }
+    }
+}
+
+class HumanPlayerController extends PlayerController {
+    controls: [ECS.Keys, ECS.Keys, ECS.Keys, ECS.Keys, ECS.Keys];
+    
+    constructor(controls: [ECS.Keys, ECS.Keys, ECS.Keys, ECS.Keys, ECS.Keys], player_tag: string) {
+        super();
+        this.controls = controls;
+        this.player_tag = player_tag;
+    }
+    onInit() {
+        this.player = new Player(this.scene.findObjectByTag(this.player_tag));
+    }
+
+    onUpdate(delta: number, absolute: number) {
+        this.updateGameState();
+        if (gs != GameState.RUNNING) return;
+        this.move(delta, absolute, this.controls);
+        if (this.owner.hasFlag(PlayerFlags.BOMB_TO_PLANT)) {
+             this.plantBomb();
+             this.owner.resetFlag(PlayerFlags.BOMB_TO_PLANT);
+        }
+        this.updateBombs();
+        if (this.owner.hasFlag(PlayerFlags.KILLED) && this.player.bombs_queue.length == 0) {
+            this.owner.scene.stage.removeChild(this.owner);
+            gs = GameState.GAME_OVER;
+            let xxx = new ECS.Container('xxx');
+            this.scene.stage.addChild(xxx);
+
+            let sprite = new ECS.Sprite('', Bomberman.createTexture(0, 0, 800, 600, 'game_over'));
+            sprite.position.x = 0;
+            sprite.position.y = 0;
+            sprite.scale.set(TEXTURE_SCALE * 0.6);
+
+            xxx.addChild(sprite);
+            let winner = this.player_tag == Tags.PLAYER1 ? 'player2' : 'player1';
+
+            let text = new PIXI.Text(winner + ' WON',
+            {fontWeight : 'bold', letterSpacing : 0.75, fontFamily : 'Arial', fontSize: 3, fill : 0xee33ff, align : 'right'});
+            text.scale.set(0.5);
+            text.position.x = text.position.x + 2;
+            text.position.y = text.position.y + 3;
+            xxx.addChild(text);
+        }
+    }
+}
+
+class Bomberman {
+    engine: ECS.Engine;
+    start_game_tex: ECS.Sprite;
+    game_over_tex: ECS.Sprite;
+
+    constructor() {
+        this.engine = new ECS.Engine();
+        let canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
+
+        this.engine.init(canvas, {
+            width: 800,
+            height: 600,
+            resolution: 800 / SCENE_WIDTH,
+            resizeToScreen: true,
+            flagsSearchEnabled: true
+        });
+        
+        this.engine.app.loader
+            .reset()
+            .add('spritesheet', './assets/spritesheet.png')
+            .add('start_game', './assets/start_game.png')
+            .add('game_over', './assets/game_over.png')
+            .load(() => this.load());
+    }
+
+    load() {
+        const scene = this.engine.scene;
+        scene.addGlobalComponent(new ECS.KeyInputComponent());
+
+        let path = new ECS.Container('pathLayer');
+        scene.stage.addChild(path);
+
+        let boundaries = new ECS.Container('boundaryLayer');
+        scene.stage.addChild(boundaries);
+
+        let flowers = new ECS.Container('flowersLayer');
+        scene.stage.addChild(flowers);
+
+        let bombs = new ECS.Container('bombLayer');
+        scene.stage.addChild(bombs);
+
+        this.generateMap(path, flowers, boundaries);
+        this.drawBoundaries(boundaries);
+
+        this.createPlayers();
+
+        let xxx = new ECS.Container('xxx');
+        scene.stage.addChild(xxx);
+
+        this.start_game_tex = new ECS.Sprite('', Bomberman.createTexture(0, 0, 800, 600, 'start_game'));
+        this.start_game_tex.position.x = 0;
+        this.start_game_tex.position.y = 0;
+        this.start_game_tex.scale.set(TEXTURE_SCALE * 0.6);
+
+        xxx.addChild(this.start_game_tex);
+        gs = GameState.START;
+    }
+
+    createPlayers() {
+        new ECS.Builder(this.engine.scene)
+        .anchor(0)
+        .localPos(1, 1)
+        .withTag(Tags.PLAYER1)
+        .withTag(Tags.PLAYER)
+        .asSprite(Bomberman.createTexture(72, 0, 24, 24))
+        .withParent(this.engine.scene.stage)
+        .withComponent(new CollisionHandler())
+        .withComponent(new HumanPlayerController(FIRST_PLAYER_CONTROLS, Tags.PLAYER1))
+        .scale(TEXTURE_SCALE)
+        .build();
+
+        new ECS.Builder(this.engine.scene)
+        .anchor(0)
+        .localPos(SCENE_WIDTH - 2, 1)
+        .withTag(Tags.PLAYER2)
+        .withTag(Tags.PLAYER)
+        .asSprite(Bomberman.createTexture(48, 24, 24, 24))
+        .withParent(this.engine.scene.stage)
+        .withComponent(new CollisionHandler())
+        .withComponent(new HumanPlayerController(SECOND_PLAYER_CONTROLS, Tags.PLAYER2))
+        .scale(TEXTURE_SCALE)
+        .build();
+    }
+
+    private generateMap(path: ECS.Container, flowers: ECS.Container, walls: ECS.Container) {
+        for (let i = 1; i < SCENE_WIDTH - 1; i++) {
+            for (let j = 1; j < SCENE_HEIGHT - 2; j++) {
+                
+                let x = Math.random() * 100;
+                if ((i == 1 && j == 1) || (i == 18 && j == 1)) {
+                    x = 50;
+                }
+                if (x < 30) {
+                    let sprite = new ECS.Sprite('', Bomberman.createTexture(24, 0, 24, 24) );
+                    sprite.addTag(Tags.FLOWER);
+                    sprite.scale.set(TEXTURE_SCALE);
+                    sprite.position.x = i;
+                    sprite.position.y = j;
+                    flowers.addChild(sprite);
+                }
+                else if (x < 35) {
+                    let sprite = new ECS.Sprite('', Bomberman.createTexture(48, 0, 24, 24) );
+                    sprite.addTag(Tags.BOUNDARY);
+                    sprite.scale.set(TEXTURE_SCALE);
+                    sprite.position.x = i;
+                    sprite.position.y = j;
+                    walls.addChild(sprite);
+                }
+                else {
+                    let sprite = new ECS.Sprite('', Bomberman.createTexture(0, 0, 24, 24) );
+                    sprite.addTag(Tags.PATH);
+                    sprite.scale.set(TEXTURE_SCALE);
+                    sprite.position.x = i;
+                    sprite.position.y = j;
+                    path.addChild(sprite);
+                }
+            }
+        }
+    }
+
+    private drawBoundaries(boundaries: ECS.Container) {
+        // render upper and lower boundaries
+        for (let i = 0; i < SCENE_WIDTH; i++) {
+            let sprite1 = new ECS.Sprite('', Bomberman.createTexture(48, 0, 24, 24) );
+            sprite1.addTag(Tags.BOUNDARY);
+            sprite1.scale.set(TEXTURE_SCALE);
+            sprite1.position.x = i;
+            sprite1.position.y = 0;
+            boundaries.addChild(sprite1);
+        
+            let sprite2 = new ECS.Sprite('', Bomberman.createTexture(48, 0, 24, 24) );
+            sprite2.addTag(Tags.BOUNDARY);
+            sprite2.scale.set(TEXTURE_SCALE);
+            sprite2.position.x = i;
+            sprite2.position.y = SCENE_HEIGHT - 2 ;
+            boundaries.addChild(sprite2);
+        }
+
+        for (let i = 0; i < SCENE_HEIGHT; i++) {
+            let sprite3 = new ECS.Sprite('', Bomberman.createTexture(48, 0, 24, 24) );
+            sprite3.addTag(Tags.BOUNDARY);
+            sprite3.scale.set(TEXTURE_SCALE);
+            sprite3.position.x = 0;
+            sprite3.position.y = i;
+            boundaries.addChild(sprite3);
+        
+            let sprite4 = new ECS.Sprite('', Bomberman.createTexture(48, 0, 24, 24) );
+            sprite4.addTag(Tags.BOUNDARY);
+            sprite4.scale.set(TEXTURE_SCALE);
+            sprite4.position.x = SCENE_WIDTH - 1;
+            sprite4.position.y = i;
+            boundaries.addChild(sprite4);
+        }
+    }
+
+    public static createTexture(offsetX: number, offsetY: number, width: number, height: number, name: string = 'spritesheet') {
+        let texture = PIXI.Texture.from(name);
+        texture = texture.clone();
+        texture.frame = new PIXI.Rectangle(offsetX, offsetY, width, height);
+        return texture;
+    }
+}*/
+var _default = new _Bomberman.Bomberman();
 
 exports.default = _default;
-},{"../libs/pixi-ecs":"../libs/pixi-ecs/index.ts"}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./Bomberman":"../src/Bomberman.ts"}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -60773,7 +61487,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51123" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55671" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
