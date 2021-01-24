@@ -1,5 +1,6 @@
 import { systems, TextureLoader } from 'pixi.js';
 import * as ECS from '../libs/pixi-ecs';
+import { GameObjectState } from '../libs/pixi-ecs/engine/game-object-proxy';
 
 const SCENE_WIDTH = 20;
 const SCENE_HEIGHT = 16;
@@ -7,6 +8,8 @@ const TEXTURE_SCALE = SCENE_WIDTH / (20 * 24);
 const MOVE_CONST = 0.005;
 const _X = 0;
 const _Y = 1;
+enum GameState { START, RUNNING, GAME_OVER }
+let gs: GameState;
 const FIRST_PLAYER_CONTROLS:  [ECS.Keys, ECS.Keys, ECS.Keys, ECS.Keys, ECS.Keys] 
                             = [ECS.Keys.KEY_LEFT, ECS.Keys.KEY_RIGHT, ECS.Keys.KEY_UP, ECS.Keys.KEY_DOWN, ECS.Keys.KEY_SPACE];
 const SECOND_PLAYER_CONTROLS: [ECS.Keys, ECS.Keys, ECS.Keys, ECS.Keys, ECS.Keys]
@@ -41,8 +44,6 @@ function getSpriteAtPos(x_pos: number, y_pos: number, tag: string, scene: ECS.Sc
         if (sprite.x == x_pos && sprite.y == y_pos) return sprite;
     }
 }
-
-
 
 class CollisionHandler extends ECS.Component {
     onUpdate(delta: number, absolute: number) {
@@ -200,10 +201,7 @@ class Bomb {
             sprite.position.y = x.y;
             this.bomb_layer.addChild(sprite);
             this.explosion_sprites.push(sprite);
-            //this.path_layer.removeChild(x);
-            //x.removeTag(Tags.DANGER)
         }        
-        //this.danger_sprites = [];
     }
 
     destroyHitSprites() {
@@ -311,6 +309,10 @@ class PlayerController extends ECS.Component {
 
     move(delta: number, absolute: number, controls: [ECS.Keys, ECS.Keys, ECS.Keys, ECS.Keys, ECS.Keys]) {
         const keyInputCmp = this.scene.findGlobalComponentByName<ECS.KeyInputComponent>(ECS.KeyInputComponent.name);
+        if (gs == GameState.START && keyInputCmp.isKeyPressed(ECS.Keys.KEY_S)) {
+            gs = GameState.RUNNING;
+            return;
+        }
        
         if (keyInputCmp.isKeyPressed(controls[p_contr._LEFT])) {
             if (this.owner.hasFlag(PlayerFlags.LEFT_COLLISION)) keyInputCmp.handleKey(controls[p_contr._LEFT]);
@@ -348,6 +350,22 @@ class PlayerController extends ECS.Component {
             this.player.bombs_queue.push(b);
         }
     }
+
+    updateGameState() {
+        if (gs != GameState.START) return;
+
+        const keyInputCmp = this.scene.findGlobalComponentByName<ECS.KeyInputComponent>(ECS.KeyInputComponent.name);
+        if (keyInputCmp.isKeyPressed(ECS.Keys.KEY_S)) {
+            keyInputCmp.handleKey(ECS.Keys.KEY_S);
+            let a = this.scene.stage.getChildByName('xxx');
+            
+            this.scene.stage.removeChild(a);
+            a.destroy();
+            gs = GameState.RUNNING;
+            console.log("GAME IS RUNNING!!!");
+        }
+    }
+
     updateBombs() {
         if (this.player.bombs_queue.length > 0) {
             let bomb = this.player.bombs_queue[0];
@@ -378,7 +396,8 @@ class HumanPlayerController extends PlayerController {
     }
 
     onUpdate(delta: number, absolute: number) {
-        
+        this.updateGameState();
+        if (gs != GameState.RUNNING) return;
         this.move(delta, absolute, this.controls);
         if (this.owner.hasFlag(PlayerFlags.BOMB_TO_PLANT)) {
              this.plantBomb(); 
@@ -386,73 +405,33 @@ class HumanPlayerController extends PlayerController {
         }
         this.updateBombs();
         if (this.owner.hasFlag(PlayerFlags.KILLED) && this.player.bombs_queue.length == 0) {
-        
             this.owner.scene.stage.removeChild(this.owner);
-        }
-    }
-}
+            gs = GameState.GAME_OVER;
+            let xxx = new ECS.Container('xxx');
+            this.scene.stage.addChild(xxx);
 
-class AIController extends PlayerController {
-    safe_tile : ECS.Container;
-    is_safetile_set: boolean = false;
-    is_moving : boolean = false;
-    sourcepos : [number, number];
-    constructor(player_tag: string) {
-        super();
-        this.player_tag = player_tag;
-    }
+            let sprite = new ECS.Sprite('', Bomberman.createTexture(0, 0, 800, 600, 'game_over'));
+            sprite.position.x = 0;
+            sprite.position.y = 0;
+            sprite.scale.set(TEXTURE_SCALE * 0.6);
 
-    onInit() {
-        this.player = new Player(this.scene.findObjectByTag(this.player_tag));
-    }
+            xxx.addChild(sprite);
+            let winner = this.player_tag == Tags.PLAYER1 ? 'player2' : 'player1';
 
-    onUpdate(delta: number, absolute: number) {
-      
-        if (!this.isSafe()) {
-            // todo : find safe place
-            if (!this.is_safetile_set) {
-                this.sourcepos = [Math.round(this.owner.x), Math.round(this.owner.y)];
-                this.is_safetile_set = true;
-                
-            }
-            let left = getSpriteAtPos(this.sourcepos[0], this.sourcepos[1], Tags.PATH, this.owner.scene);
-            let right =getSpriteAtPos(this.sourcepos[0], this.sourcepos[1], Tags.PATH, this.owner.scene);
-            let up =   getSpriteAtPos(this.sourcepos[0], this.sourcepos[1], Tags.PATH, this.owner.scene);
-            let down = getSpriteAtPos(this.sourcepos[0], this.sourcepos[1], Tags.PATH, this.owner.scene);
-                    
-            if (!this.owner.hasFlag(PlayerFlags.RIGHT_COLLISION) && right) {this.moveRight(delta*0.01);  this.is_safetile_set = true; return; }
-            if (!this.owner.hasFlag(PlayerFlags.LEFT_COLLISION) && left)   {this.moveLeft (delta*0.01);  this.is_safetile_set = true; return; }
-            if (!this.owner.hasFlag(PlayerFlags.UPPER_COLLISION) && up)    {this.moveUp   (delta*0.01);  this.is_safetile_set = true; return; }
-            if (!this.owner.hasFlag(PlayerFlags.BOTTOM_COLLISION) && down) {this.moveDown (delta*0.01);  this.is_safetile_set = true; return; }
-                
-        } else {
-            this.is_safetile_set = false;
-            this.owner.removeTag(Tags.DANGER);
-            this.owner.resetFlag(PlayerFlags.IN_DANGER);
-            // todo : other interesting things
-        }
-
-    }
-
-    isSafe() {
-        return !this.owner.hasFlag(PlayerFlags.IN_DANGER) || !this.owner.hasTag(Tags.DANGER);
-    }
-
-    getSafeTile() {
-        
-        let path_layer = this.owner.parent.getChildByName('pathLayer') as ECS.Container;
-        for (let tile of path_layer.children) {
-            let t = tile as ECS.Sprite;
-            if (t.hasTag(Tags.PATH) && (Math.abs(t.x - this.owner.x) < 4 && Math.abs(t.y - this.owner.y) < 4)) {
-                console.log("Safety is at: ", t.x, " ", t.y);
-                return t;
-            }
+            let text = new PIXI.Text(winner + ' WON',
+            {fontWeight : 'bold', letterSpacing : 0.75, fontFamily : 'Arial', fontSize: 3, fill : 0xee33ff, align : 'right'});
+            text.scale.set(0.5);
+            text.position.x = text.position.x + 2;
+            text.position.y = text.position.y + 3;
+            xxx.addChild(text); 
         }
     }
 }
 
 class Bomberman {
     engine: ECS.Engine;
+    start_game_tex: ECS.Sprite;
+    game_over_tex: ECS.Sprite;
 
     constructor() {
         this.engine = new ECS.Engine();
@@ -469,9 +448,10 @@ class Bomberman {
         this.engine.app.loader
             .reset()
             .add('spritesheet', './assets/spritesheet.png')
+            .add('start_game', './assets/start_game.png')
+            .add('game_over', './assets/game_over.png')
             .load(() => this.load());
     }
-
 
     load() {
         const scene = this.engine.scene;
@@ -493,7 +473,17 @@ class Bomberman {
         this.drawBoundaries(boundaries);
 
         this.createPlayers();
-        
+
+        let xxx = new ECS.Container('xxx');
+        scene.stage.addChild(xxx);
+
+        this.start_game_tex = new ECS.Sprite('', Bomberman.createTexture(0, 0, 800, 600, 'start_game'));
+        this.start_game_tex.position.x = 0;
+        this.start_game_tex.position.y = 0;
+        this.start_game_tex.scale.set(TEXTURE_SCALE * 0.6);
+
+        xxx.addChild(this.start_game_tex);
+        gs = GameState.START;
     }
 
     createPlayers() {
@@ -520,31 +510,6 @@ class Bomberman {
         .withComponent(new HumanPlayerController(SECOND_PLAYER_CONTROLS, Tags.PLAYER2))
         .scale(TEXTURE_SCALE)
         .build();
-
-        new ECS.Builder(this.engine.scene)
-        .anchor(0)
-        .localPos(1, SCENE_HEIGHT - 3)
-        .withTag(Tags.PLAYER3)
-        .withTag(Tags.AI)
-        .asSprite(Bomberman.createTexture(24, 24, 24, 24))
-        .withParent(this.engine.scene.stage)
-        .withComponent(new CollisionHandler())
-        .withComponent(new AIController(Tags.AI))
-        .scale(TEXTURE_SCALE)
-        .build();
-
-        new ECS.Builder(this.engine.scene)
-        .anchor(0)
-        .localPos(SCENE_WIDTH - 2, SCENE_HEIGHT - 3)
-        .withTag(Tags.PLAYER4)
-        .withTag(Tags.AI)
-        .asSprite(Bomberman.createTexture(72, 24, 24, 24))
-        .withParent(this.engine.scene.stage)
-        .withComponent(new CollisionHandler())
-        .withComponent(new AIController(Tags.AI))
-        .scale(TEXTURE_SCALE)
-        .build();
-
     }
 
     private generateMap(path: ECS.Container, flowers: ECS.Container, walls: ECS.Container) {
@@ -552,7 +517,7 @@ class Bomberman {
             for (let j = 1; j < SCENE_HEIGHT - 2; j++) {
                 
                 let x = Math.random() * 100;
-                if ((i == 1 && j == 1) || (i == 18 && j == 1) || (i == 18 && j == 13) || (i == 1 && j == 13) ) {
+                if ((i == 1 && j == 1) || (i == 18 && j == 1)) {
                     x = 50;
                 }
                 if (x < 30) {
@@ -618,8 +583,8 @@ class Bomberman {
         } 
     }
 
-    public static createTexture(offsetX: number, offsetY: number, width: number, height: number) {
-        let texture = PIXI.Texture.from('spritesheet');
+    public static createTexture(offsetX: number, offsetY: number, width: number, height: number, name: string = 'spritesheet') {
+        let texture = PIXI.Texture.from(name);
         texture = texture.clone();
         texture.frame = new PIXI.Rectangle(offsetX, offsetY, width, height);
         return texture;
