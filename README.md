@@ -7,4 +7,7 @@ Basic implementation of classic game bomberman, implemented for 2 local players.
     Arrows for moving, SPACE for planting a bomb
 #### Player2
     WASD for moving, SHIFT for planting a bomb
+
+[<img src="./assets/2021-01-24 23_18_2Window.png">](bomberman game screenshot)
+
 https://gabrielaraven.github.io/build_project/index.html
