@@ -1,7 +1,9 @@
 import { systems, TextureLoader } from 'pixi.js';
 import * as ECS from '../libs/pixi-ecs';
 import { GameObjectState } from '../libs/pixi-ecs/engine/game-object-proxy';
+import { Bomberman } from './Bomberman'
 
+/*
 const SCENE_WIDTH = 20;
 const SCENE_HEIGHT = 16;
 const TEXTURE_SCALE = SCENE_WIDTH / (20 * 24);
@@ -34,17 +36,13 @@ enum PlayerFlags {
 	LEFT_COLLISION = 1, RIGHT_COLLISION = 2, UPPER_COLLISION = 3, BOTTOM_COLLISION = 4, BOMB_TO_PLANT = 5, KILLED = 6, IN_DANGER = 7
 }
 
-enum SpriteStateFlags {
-    SPRITE_TO_DESTROY = 12
-}
-
 function getSpriteAtPos(x_pos: number, y_pos: number, tag: string, scene: ECS.Scene) {
     let sprites = scene.findObjectsByTag(tag);
     for (let sprite of sprites) {
         if (sprite.x == x_pos && sprite.y == y_pos) return sprite;
     }
-}
-
+} */
+/*
 class CollisionHandler extends ECS.Component {
     onUpdate(delta: number, absolute: number) {
         let player = this.owner;
@@ -589,6 +587,6 @@ class Bomberman {
         texture.frame = new PIXI.Rectangle(offsetX, offsetY, width, height);
         return texture;
     }
-}
+}*/
 
 export default new Bomberman();
