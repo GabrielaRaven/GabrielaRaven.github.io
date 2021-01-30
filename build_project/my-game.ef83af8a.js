@@ -60776,7 +60776,7 @@ var Bomberman = /*#__PURE__*/function () {
         for (var j = 1; j < _Common.SCENE_HEIGHT - 2; j++) {
           var x = Math.random() * 100;
 
-          if (i == 1 && j == 1 || i == 18 && j == 1) {
+          if (i == 1 && j == 1 || i == 2 && j == 1 || i == 1 && j == 2 || i == 17 && j == 1 || i == 18 && j == 1 || i == 18 && j == 2) {
             x = 50;
           }
 
@@ -60787,7 +60787,7 @@ var Bomberman = /*#__PURE__*/function () {
             sprite.position.x = i;
             sprite.position.y = j;
             flowers.addChild(sprite);
-          } else if (x < 35) {
+          } else if (x < 40) {
             var _sprite = new ECS.Sprite('', Bomberman.createTexture(48, 0, 24, 24));
 
             _sprite.addTag(_Common.Tags.BOUNDARY);
@@ -60901,7 +60901,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51055" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51145" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

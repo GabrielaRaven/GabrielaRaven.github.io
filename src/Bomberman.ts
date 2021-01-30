@@ -92,9 +92,9 @@ export class Bomberman {
     private generateMap(path: ECS.Container, flowers: ECS.Container, walls: ECS.Container) {
         for (let i = 1; i < SCENE_WIDTH - 1; i++) {
             for (let j = 1; j < SCENE_HEIGHT - 2; j++) {
-                
                 let x = Math.random() * 100;
-                if ((i == 1 && j == 1) || (i == 18 && j == 1)) {
+                if ((i == 1 && j == 1) || (i == 2 && j == 1) || (i == 1 && j == 2) || 
+                    (i == 17 && j == 1)|| (i == 18 && j == 1)|| (i == 18 && j == 2)) {
                     x = 50;
                 }
                 if (x < 30) {
@@ -105,7 +105,7 @@ export class Bomberman {
                     sprite.position.y = j;
                     flowers.addChild(sprite);
                 }
-                else if (x < 35) {
+                else if (x < 40) {
                     let sprite = new ECS.Sprite('', Bomberman.createTexture(48, 0, 24, 24) );
                     sprite.addTag(Tags.BOUNDARY);
                     sprite.scale.set(TEXTURE_SCALE);
