@@ -1,15 +1,17 @@
 import * as ECS from '../libs/pixi-ecs';
-import {PlayerController} from './PlayerController'
-import { Tags, TEXTURE_SCALE, _X, _Y, GameState, PlayerFlags, createTexture } from './Common'
-import { Player } from './Player' 
+import {PlayerController} from './PlayerController';
+import { Tags, TEXTURE_SCALE, _X, _Y, GameState, PlayerFlags, createTexture } from './Common';
+import { Player } from './Player'; 
+import { Bomberman } from './Bomberman';
 
 export class HumanPlayerController extends PlayerController {
     controls: [ECS.Keys, ECS.Keys, ECS.Keys, ECS.Keys, ECS.Keys];
     
-    constructor(controls: [ECS.Keys, ECS.Keys, ECS.Keys, ECS.Keys, ECS.Keys], player_tag: string) {
+    constructor(controls: [ECS.Keys, ECS.Keys, ECS.Keys, ECS.Keys, ECS.Keys], player_tag: string, game: Bomberman) {
         super();
         this.controls = controls;
         this.player_tag = player_tag;
+        this.game = game;
     }
     onInit() {
         this.player = new Player(this.scene.findObjectByTag(this.player_tag));

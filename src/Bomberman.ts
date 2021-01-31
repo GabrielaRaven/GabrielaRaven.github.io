@@ -63,6 +63,39 @@ export class Bomberman {
         window.gs = GameState.START;
     }
 
+    restartGame() {
+        const scene = this.engine.scene;
+        scene.stage.removeChildren(0, scene.stage.children.length);
+
+        let path = new ECS.Container('pathLayer');
+        scene.stage.addChild(path);
+
+        let boundaries = new ECS.Container('boundaryLayer');
+        scene.stage.addChild(boundaries);
+
+        let flowers = new ECS.Container('flowersLayer');
+        scene.stage.addChild(flowers);
+
+        let bombs = new ECS.Container('bombLayer');
+        scene.stage.addChild(bombs);
+
+        this.generateMap(path, flowers, boundaries);
+        this.drawBoundaries(boundaries);
+
+        this.createPlayers();
+        
+        let xxx = new ECS.Container('xxx');
+        scene.stage.addChild(xxx);
+
+        this.start_game_tex = new ECS.Sprite('', Bomberman.createTexture(0, 0, 800, 600, 'start_game'));
+        this.start_game_tex.position.x = 0;
+        this.start_game_tex.position.y = 0;
+        this.start_game_tex.scale.set(TEXTURE_SCALE * 0.6);
+
+        xxx.addChild(this.start_game_tex); 
+        window.gs = GameState.RUNNING;
+    }
+
     createPlayers() {
         new ECS.Builder(this.engine.scene)
         .anchor(0)
@@ -72,7 +105,7 @@ export class Bomberman {
         .asSprite(Bomberman.createTexture(72, 0, 24, 24))
         .withParent(this.engine.scene.stage)
         .withComponent(new CollisionHandler())
-        .withComponent(new HumanPlayerController(FIRST_PLAYER_CONTROLS, Tags.PLAYER1))
+        .withComponent(new HumanPlayerController(FIRST_PLAYER_CONTROLS, Tags.PLAYER1, this))
         .scale(TEXTURE_SCALE)
         .build();
 
@@ -84,7 +117,7 @@ export class Bomberman {
         .asSprite(Bomberman.createTexture(48, 24, 24, 24))
         .withParent(this.engine.scene.stage)
         .withComponent(new CollisionHandler())
-        .withComponent(new HumanPlayerController(SECOND_PLAYER_CONTROLS, Tags.PLAYER2))
+        .withComponent(new HumanPlayerController(SECOND_PLAYER_CONTROLS, Tags.PLAYER2, this))
         .scale(TEXTURE_SCALE)
         .build();
     }

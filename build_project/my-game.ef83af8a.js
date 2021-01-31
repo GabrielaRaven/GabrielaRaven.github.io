@@ -60374,16 +60374,21 @@ var PlayerController = /*#__PURE__*/function (_ECS$Component) {
   }, {
     key: "updateGameState",
     value: function updateGameState() {
-      if (window.gs != _Common.GameState.START) return;
       var keyInputCmp = this.scene.findGlobalComponentByName(ECS.KeyInputComponent.name);
 
-      if (keyInputCmp.isKeyPressed(ECS.Keys.KEY_S)) {
-        keyInputCmp.handleKey(ECS.Keys.KEY_S);
-        var a = this.scene.stage.getChildByName('xxx');
-        this.scene.stage.removeChild(a);
-        a.destroy();
-        window.gs = _Common.GameState.RUNNING;
-        console.log("GAME IS RUNNING!!!");
+      if (window.gs == _Common.GameState.START) {
+        if (keyInputCmp.isKeyPressed(ECS.Keys.KEY_S)) {
+          keyInputCmp.handleKey(ECS.Keys.KEY_S);
+          var a = this.scene.stage.getChildByName('xxx');
+          this.scene.stage.removeChild(a);
+          a.destroy();
+          window.gs = _Common.GameState.RUNNING;
+          console.log("GAME IS RUNNING!!!");
+        }
+      } else if (window.gs == _Common.GameState.GAME_OVER && keyInputCmp.isKeyPressed(ECS.Keys.KEY_R)) {
+        keyInputCmp.handleKey(ECS.Keys.KEY_R);
+        this.game.restartGame();
+        window.gs = _Common.GameState.START;
       }
     }
   }, {
@@ -60477,7 +60482,7 @@ var HumanPlayerController = /*#__PURE__*/function (_PlayerController) {
 
   var _super = _createSuper(HumanPlayerController);
 
-  function HumanPlayerController(controls, player_tag) {
+  function HumanPlayerController(controls, player_tag, game) {
     var _this;
 
     _classCallCheck(this, HumanPlayerController);
@@ -60485,6 +60490,7 @@ var HumanPlayerController = /*#__PURE__*/function (_PlayerController) {
     _this = _super.call(this);
     _this.controls = controls;
     _this.player_tag = player_tag;
+    _this.game = game;
     return _this;
   }
 
@@ -60764,10 +60770,35 @@ var Bomberman = /*#__PURE__*/function () {
       window.gs = _Common.GameState.START;
     }
   }, {
+    key: "restartGame",
+    value: function restartGame() {
+      var scene = this.engine.scene;
+      scene.stage.removeChildren(0, scene.stage.children.length);
+      var path = new ECS.Container('pathLayer');
+      scene.stage.addChild(path);
+      var boundaries = new ECS.Container('boundaryLayer');
+      scene.stage.addChild(boundaries);
+      var flowers = new ECS.Container('flowersLayer');
+      scene.stage.addChild(flowers);
+      var bombs = new ECS.Container('bombLayer');
+      scene.stage.addChild(bombs);
+      this.generateMap(path, flowers, boundaries);
+      this.drawBoundaries(boundaries);
+      this.createPlayers();
+      var xxx = new ECS.Container('xxx');
+      scene.stage.addChild(xxx);
+      this.start_game_tex = new ECS.Sprite('', Bomberman.createTexture(0, 0, 800, 600, 'start_game'));
+      this.start_game_tex.position.x = 0;
+      this.start_game_tex.position.y = 0;
+      this.start_game_tex.scale.set(_Common.TEXTURE_SCALE * 0.6);
+      xxx.addChild(this.start_game_tex);
+      window.gs = _Common.GameState.RUNNING;
+    }
+  }, {
     key: "createPlayers",
     value: function createPlayers() {
-      new ECS.Builder(this.engine.scene).anchor(0).localPos(1, 1).withTag(_Common.Tags.PLAYER1).withTag(_Common.Tags.PLAYER).asSprite(Bomberman.createTexture(72, 0, 24, 24)).withParent(this.engine.scene.stage).withComponent(new _CollisionHandler.CollisionHandler()).withComponent(new _HumanPlayerController.HumanPlayerController(_Common.FIRST_PLAYER_CONTROLS, _Common.Tags.PLAYER1)).scale(_Common.TEXTURE_SCALE).build();
-      new ECS.Builder(this.engine.scene).anchor(0).localPos(_Common.SCENE_WIDTH - 2, 1).withTag(_Common.Tags.PLAYER2).withTag(_Common.Tags.PLAYER).asSprite(Bomberman.createTexture(48, 24, 24, 24)).withParent(this.engine.scene.stage).withComponent(new _CollisionHandler.CollisionHandler()).withComponent(new _HumanPlayerController.HumanPlayerController(_Common.SECOND_PLAYER_CONTROLS, _Common.Tags.PLAYER2)).scale(_Common.TEXTURE_SCALE).build();
+      new ECS.Builder(this.engine.scene).anchor(0).localPos(1, 1).withTag(_Common.Tags.PLAYER1).withTag(_Common.Tags.PLAYER).asSprite(Bomberman.createTexture(72, 0, 24, 24)).withParent(this.engine.scene.stage).withComponent(new _CollisionHandler.CollisionHandler()).withComponent(new _HumanPlayerController.HumanPlayerController(_Common.FIRST_PLAYER_CONTROLS, _Common.Tags.PLAYER1, this)).scale(_Common.TEXTURE_SCALE).build();
+      new ECS.Builder(this.engine.scene).anchor(0).localPos(_Common.SCENE_WIDTH - 2, 1).withTag(_Common.Tags.PLAYER2).withTag(_Common.Tags.PLAYER).asSprite(Bomberman.createTexture(48, 24, 24, 24)).withParent(this.engine.scene.stage).withComponent(new _CollisionHandler.CollisionHandler()).withComponent(new _HumanPlayerController.HumanPlayerController(_Common.SECOND_PLAYER_CONTROLS, _Common.Tags.PLAYER2, this)).scale(_Common.TEXTURE_SCALE).build();
     }
   }, {
     key: "generateMap",
@@ -60901,7 +60932,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51145" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57164" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -1,11 +1,13 @@
 import * as ECS from '../libs/pixi-ecs';
 import { Bomb } from './Bomb'
+import { Bomberman } from './Bomberman';
 import { p_contr, PlayerFlags, SCENE_WIDTH, SCENE_HEIGHT, _X, _Y, GameState } from './Common'
 import { Player } from './Player'
 
 export class PlayerController extends ECS.Component {
     player: Player;
     player_tag: string;
+    game: Bomberman;
 
     moveLeft(units: number) {
         const bbox = this.owner.getBounds();
@@ -86,17 +88,21 @@ export class PlayerController extends ECS.Component {
     }
 
     updateGameState() {
-        if (window.gs != GameState.START) return;
-
         const keyInputCmp = this.scene.findGlobalComponentByName<ECS.KeyInputComponent>(ECS.KeyInputComponent.name);
-        if (keyInputCmp.isKeyPressed(ECS.Keys.KEY_S)) {
-            keyInputCmp.handleKey(ECS.Keys.KEY_S);
-            let a = this.scene.stage.getChildByName('xxx');
-            
-            this.scene.stage.removeChild(a);
-            a.destroy();
-            window.gs = GameState.RUNNING;
-            console.log("GAME IS RUNNING!!!");
+        if (window.gs == GameState.START) {
+            if (keyInputCmp.isKeyPressed(ECS.Keys.KEY_S)) {
+                keyInputCmp.handleKey(ECS.Keys.KEY_S);
+                let a = this.scene.stage.getChildByName('xxx');
+                
+                this.scene.stage.removeChild(a);
+                a.destroy();
+                window.gs = GameState.RUNNING;
+                console.log("GAME IS RUNNING!!!");
+            }
+        } else if (window.gs == GameState.GAME_OVER && keyInputCmp.isKeyPressed(ECS.Keys.KEY_R)) {
+                keyInputCmp.handleKey(ECS.Keys.KEY_R);
+                this.game.restartGame();
+                window.gs = GameState.START;
         }
     }
 

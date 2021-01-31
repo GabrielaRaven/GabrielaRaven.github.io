@@ -10,4 +10,10 @@ Basic implementation of classic game bomberman, implemented for 2 local players.
 
 <img src="./assets/2021-01-24 23_18_2Window.png">
 
+### How to run the game locally
+    1. Clone this repo 
+    2. Open terminal, cd into cloned repo and type 'npm run dev'
+    3. Open http://localhost:1234 and enjoy the game :)
+
+#### Deployed game
 https://gabrielaraven.github.io/build_project/index.html
